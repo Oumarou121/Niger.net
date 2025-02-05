@@ -306,13 +306,11 @@
 
 /* ====================================== */
 
-.other-filtre .filter-content,
-.other-filtre .price-content {
+.other-filtre .filter-content {
   display: none;
 }
 
-.other-filtre .filter-content.visible,
-.other-filtre .price-content.visible {
+.other-filtre .filter-content.visible {
   display: block;
 }
 
@@ -461,12 +459,20 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .filtre-item-desktop {
-  background: hsl(0 0% 86.3%);
+  background: #f4f4f4;
   display: flex;
   justify-content: space-between;
   padding: 0 10px;
   font-family: "Poppins", sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.selectedFilters-desktop {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
 @media (min-width: 992px) {

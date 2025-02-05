@@ -224,7 +224,10 @@ function toggleVisibility(ul) {
     });
   }
 }
-
+const selectedFiltersClass = document.querySelector(".selectedFilters");
+const selectedFiltersClassDesktop = document.querySelector(
+  ".selectedFilters-desktop"
+);
 const categoryList = document.getElementById("category-list");
 const categoryListDesktop = document.getElementById("category-list-desktop");
 generateCategoryList(filtres.generateFilters(), categoryList, false);
@@ -236,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
   function updateBreadcrumb(categoryPath) {
-    breadcrumbContainer.innerHTML = ""; // Réinitialiser
+    breadcrumbContainer.innerHTML = "";
 
     const paths = ["Home", "Shop", ...categoryPath.split("/")].filter(Boolean);
 
@@ -278,7 +281,6 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     parcoursCategory(currentCategory, filtresContent, false);
     parcoursCategory(currentCategory, filtresContentDesktop, true);
-    // console.log("Catégorie actuelle :", currentCategory);
   }
 
   loadCategory();
@@ -303,24 +305,19 @@ function findCategory(categories, path) {
 }
 
 function parcoursCategory(category, container, isDesktop) {
-  // Ajouter les options de la catégorie actuelle
   category.getOptions().forEach((option) => {
     addOptionsToDisplay(option, container, isDesktop);
-    // console.log(option);
   });
 
-  // Ensuite, parcourir les sous-catégories
   category.getSubCategory().forEach((subCategory) => {
     parcoursCategory(subCategory, container, isDesktop);
   });
 }
 
 function addOptionsToDisplay(option, container, isDesktop) {
-  // Créer une section pour l'option
   const optionSection = document.createElement("div");
   optionSection.classList.add("categories");
 
-  // Créer l'élément de titre (filtre-top)
   const optionTitleDiv = document.createElement("div");
   optionTitleDiv.classList.add("filtre-top");
 
@@ -334,13 +331,11 @@ function addOptionsToDisplay(option, container, isDesktop) {
 
     optionTitleDiv.appendChild(optionIcon);
 
-    // Ajouter un événement de clic pour afficher/masquer le contenu
     optionTitleDiv.addEventListener("click", () => {
       const contentDiv = optionSection.querySelector(".filter-content");
-      contentDiv.classList.toggle("visible"); // Alterner la classe pour l'affichage
+      contentDiv.classList.toggle("visible");
 
-      // Rotation de l'icône
-      optionIcon.classList.toggle("rotated"); // Ajouter une classe pour faire tourner l'icône
+      optionIcon.classList.toggle("rotated");
     });
   }
 
@@ -360,23 +355,9 @@ function addOptionsToDisplay(option, container, isDesktop) {
 
     const optionLabel = document.createElement("span");
     optionLabel.textContent = ` ${value}`;
-    if (!isDesktop) {
-      optionCheckbox.addEventListener("change", () => {
-        const selectedFiltersClass = document.querySelector(".selectedFilters");
-        const filterItem = document.createElement("div");
-        filterItem.classList.add("filtre-item");
-        filterItem.textContent = `${option.getTitle()}  - ${value}`;
-        const removeBtn = document.createElement("i");
-        removeBtn.classList.add("uil", "uil-times");
-        removeBtn.addEventListener("click", () => {
-          filterItem.remove();
-          optionCheckbox.checked = false;
-        });
-        filterItem.appendChild(removeBtn);
-        selectedFiltersClass.appendChild(filterItem);
-        optionCheckbox.filterItem = filterItem;
-      });
-    }
+    optionCheckbox.addEventListener("change", () => {
+      createItemy(optionCheckbox, option.getTitle(), value, isDesktop);
+    });
     listItem.appendChild(optionCheckbox);
     listItem.appendChild(optionLabel);
     optionList.appendChild(listItem);
@@ -385,46 +366,61 @@ function addOptionsToDisplay(option, container, isDesktop) {
   optionContentDiv.appendChild(optionList);
   optionSection.appendChild(optionContentDiv);
 
-  // Ajouter un séparateur
   const hr = document.createElement("hr");
   hr.classList.add("custom-hr");
   optionSection.appendChild(hr);
 
-  // Ajouter cette section dans le conteneur
   container.appendChild(optionSection);
 }
 
+function createItemy(optionCheckbox, title, value, isDesktop) {
+  if (optionCheckbox.checked) {
+    const filterItem = document.createElement("div");
+    filterItem.classList.add(isDesktop ? "filtre-item-desktop" : "filtre-item");
+    filterItem.textContent = `${title}  - ${value}`;
+    const removeBtn = document.createElement("i");
+    removeBtn.classList.add("uil", "uil-times");
+    removeBtn.addEventListener("click", () => {
+      filterItem.remove();
+      optionCheckbox.checked = false;
+    });
+    filterItem.appendChild(removeBtn);
+    isDesktop
+      ? selectedFiltersClassDesktop.appendChild(filterItem)
+      : selectedFiltersClass.appendChild(filterItem);
+    optionCheckbox.filterItem = filterItem;
+  } else {
+    optionCheckbox.filterItem.remove();
+  }
+}
 // ===============================================================================================
 
-// Fonction générique pour ajouter ou mettre à jour le filtre de prix
 function updatePriceFilter(min, max, isDesktop = false) {
-  const filterClass = isDesktop ? ".filtre-item.price" : ".filtre-item.price";
+  const filterClass = isDesktop
+    ? ".filtre-item-desktop.price"
+    : ".filtre-item.price";
   const selectedFiltersClass = isDesktop
     ? ".selectedFilters-desktop"
     : ".selectedFilters";
 
   let priceFilterItem = document.querySelector(filterClass);
 
-  if (!priceFilterItem && !isDesktop) {
-    // Si l'élément n'existe pas encore, créer un nouvel élément filtr-item
+  if (!priceFilterItem) {
     priceFilterItem = document.createElement("div");
     priceFilterItem.classList.add(
-      isDesktop ? "filtre-item" : "filtre-item",
+      isDesktop ? "filtre-item-desktop" : "filtre-item",
       "price"
     );
 
-    // Ajouter un conteneur pour le texte et le bouton
     const filterContent = document.createElement("span");
     filterContent.classList.add(
-      isDesktop ? "filter-content-desktop" : "filter-content"
+      isDesktop ? "filter-content-desktop" : "filter-content1"
     );
 
-    // Ajouter le bouton de suppression (croix)
     const removeBtn = document.createElement("i");
     removeBtn.classList.add("uil", "uil-times");
-    removeBtn.style.cursor = "pointer"; // Indiquer que le bouton est cliquable
+    removeBtn.style.cursor = "pointer";
     removeBtn.addEventListener("click", () => {
-      // Réinitialiser les sliders et les inputs
       const rangeInputs = document.querySelectorAll(
         isDesktop ? ".range-input-desktop input" : ".range-input input"
       );
@@ -435,26 +431,22 @@ function updatePriceFilter(min, max, isDesktop = false) {
       rangeInputs[1].value = rangeInputs[1].max;
       priceInputs[0].value = rangeInputs[0].min;
       priceInputs[1].value = rangeInputs[1].max;
-      updatePriceSlider(isDesktop); // Mise à jour visuelle du slider
-      priceFilterItem.remove(); // Supprimer l'élément de filtre
+      updatePriceSlider(isDesktop);
+      priceFilterItem.remove();
     });
 
-    // Ajouter le contenu et le bouton à l'élément filtr-item
     priceFilterItem.appendChild(filterContent);
     priceFilterItem.appendChild(removeBtn);
 
-    // Ajouter l'élément de filtre au conteneur des filtres sélectionnés
     document.querySelector(selectedFiltersClass).appendChild(priceFilterItem);
   }
 
-  // Mettre à jour le texte de l'élément avec les nouvelles valeurs
-  const filterContent = isDesktop ? null : priceFilterItem.querySelector(
-    isDesktop ? ".filter-content-desktop" : ".filter-content"
+  const filterContent = priceFilterItem.querySelector(
+    isDesktop ? ".filter-content-desktop" : ".filter-content1"
   );
-  isDesktop ? null : filterContent.textContent = `Prix - ${min} - ${max} FCFA`;
+  filterContent.textContent = `Prix - ${min} - ${max} FCFA`;
 }
 
-// Fonction générique pour mettre à jour la partie visuelle du slider
 function updatePriceSlider(isDesktop = false) {
   const rangeInputs = document.querySelectorAll(
     isDesktop ? ".range-input-desktop input" : ".range-input input"
@@ -474,11 +466,9 @@ function updatePriceSlider(isDesktop = false) {
   range.style.left = (minVal / rangeInputs[0].max) * 100 + "%";
   range.style.right = 100 - (maxVal / rangeInputs[1].max) * 100 + "%";
 
-  // Mettre à jour l'élément filtr-item de prix
   updatePriceFilter(minVal, maxVal, isDesktop);
 }
 
-// Fonction générique pour mettre à jour la partie visuelle du slider
 function ClearUpdatePriceSlider(isDesktop = false) {
   const rangeInputs = document.querySelectorAll(
     isDesktop ? ".range-input-desktop input" : ".range-input input"
@@ -494,16 +484,13 @@ function ClearUpdatePriceSlider(isDesktop = false) {
   rangeInputs[1].value = rangeInputs[1].max;
   priceInputs[0].value = rangeInputs[0].min;
   priceInputs[1].value = rangeInputs[1].max;
-  updatePriceSlider(isDesktop); // Mise à jour visuelle du slider
+  updatePriceSlider(isDesktop);
 
-  // Mettre à jour l'élément filtr-item de prix
   updatePriceFilter(rangeInputs[0].min, rangeInputs[1].max, isDesktop);
 }
 
-// Prix et écouteurs d'événements
 const priceGap = 5000;
 
-// Gérer les entrées et les sliders pour mobile
 function setupPriceInputsAndSliders(isDesktop = false) {
   const rangeInputs = document.querySelectorAll(
     isDesktop ? ".range-input-desktop input" : ".range-input input"
@@ -523,7 +510,7 @@ function setupPriceInputsAndSliders(isDesktop = false) {
         } else {
           rangeInputs[1].value = maxPrice;
         }
-        updatePriceSlider(isDesktop); // Mise à jour visuelle et de l'élément filtr-item
+        updatePriceSlider(isDesktop);
       }
     });
   });
@@ -540,18 +527,19 @@ function setupPriceInputsAndSliders(isDesktop = false) {
           rangeInputs[1].value = minVal + priceGap;
         }
       }
-      updatePriceSlider(isDesktop); // Mise à jour visuelle et de l'élément filtr-item
+      updatePriceSlider(isDesktop);
     });
   });
 }
 
-// Initialiser les écouteurs pour mobile et desktop
 setupPriceInputsAndSliders();
-setupPriceInputsAndSliders(true); // true pour desktop
+setupPriceInputsAndSliders(true);
 // ================================================================================================
 
 const filtresContent = document.getElementById("filter-container");
-const filtresContentDesktop = document.getElementById("filter-containerDesktop");
+const filtresContentDesktop = document.getElementById(
+  "filter-containerDesktop"
+);
 const clearAllBtn = document.getElementById("clearAllFilters");
 const clearAllBtnDesktop = document.getElementById("clearAllDesktop");
 
@@ -559,35 +547,37 @@ clearAllBtn.addEventListener("click", (e) => {
   e.preventDefault();
 
   const container = document.querySelector(".selectedFilters");
-  // Réinitialiser les sliders et les inputs
   const rangeInputs = document.querySelectorAll(".range-input input");
   const priceInputs = document.querySelectorAll(".price-input input");
   rangeInputs[0].value = rangeInputs[0].min;
   rangeInputs[1].value = rangeInputs[1].max;
   priceInputs[0].value = rangeInputs[0].min;
   priceInputs[1].value = rangeInputs[1].max;
-  updatePriceSlider(); // Mise à jour visuelle du slider
-  container.querySelectorAll(".filtre-item").forEach((item) => item.remove()); // Supprimer les éléments de filtre
+  updatePriceSlider();
+  container.querySelectorAll(".filtre-item").forEach((item) => item.remove());
   filtresContent.querySelectorAll('[type="checkbox"]').forEach((input) => {
-    input.checked ? (input.checked = false) : null; // Désélectionner tous les filtres
+    input.checked ? (input.checked = false) : null;
   });
 });
 
 clearAllBtnDesktop.addEventListener("click", (e) => {
   e.preventDefault();
 
-  // const container = document.querySelector(".selectedFilters");
-  // Réinitialiser les sliders et les inputs
+  const container = document.querySelector(".selectedFilters-desktop");
   const rangeInputs = document.querySelectorAll(".range-input-desktop input");
   const priceInputs = document.querySelectorAll(".price-input-desktop input");
   rangeInputs[0].value = rangeInputs[0].min;
   rangeInputs[1].value = rangeInputs[1].max;
   priceInputs[0].value = rangeInputs[0].min;
   priceInputs[1].value = rangeInputs[1].max;
-  updatePriceSlider(true); // Mise à jour visuelle du slider
-  // container.querySelectorAll(".filtre-item").forEach((item) => item.remove()); // Supprimer les éléments de filtre
+  updatePriceSlider(true);
+  container
+    .querySelectorAll(".filtre-item-desktop")
+    .forEach((item) => item.remove());
   console.log(filtresContentDesktop);
-  filtresContentDesktop.querySelectorAll('[type="checkbox"]').forEach((input) => {
-    input.checked ? (input.checked = false) : null; // Désélectionner tous les filtres
-  });
+  filtresContentDesktop
+    .querySelectorAll('[type="checkbox"]')
+    .forEach((input) => {
+      input.checked ? (input.checked = false) : null;
+    });
 });
