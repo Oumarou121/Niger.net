@@ -1,13 +1,15 @@
 const grid = document.getElementById("grid");
 const list = document.getElementById("list");
 const productsContent = document.getElementById("listProducts");
-const productsPerPage = 9;
+const productsPerPage = 3;
 let currentPage = 1;
 const listProducts = document.getElementById("listProducts");
 const paginationContainer = document.querySelector(".shop_pagi ul");
+let filteredProducts = [];
 let products = [
   {
     id: 1,
+    sales: 100,
     name: "Uphone lightning cable",
     href: "",
     price: 10000,
@@ -40,6 +42,7 @@ let products = [
   },
   {
     id: 2,
+    sales: 10,
     name: "Smartphone Tecno Spark Go 2024",
     href: "",
     price: 65000,
@@ -69,6 +72,7 @@ let products = [
   },
   {
     id: 3,
+    sales: 5,
     name: "iPhone 14 pro max",
     href: "",
     price: 250000,
@@ -98,6 +102,7 @@ let products = [
   },
   {
     id: 4,
+    sales: 90,
     name: "Uphone lightning cable",
     href: "",
     price: 10000,
@@ -129,6 +134,7 @@ let products = [
   },
   {
     id: 5,
+    sales: 10,
     name: "Smartphone Tecno Spark Go 2024",
     href: "",
     price: 65000,
@@ -157,6 +163,7 @@ let products = [
   },
   {
     id: 6,
+    sales: 23,
     name: "iPhone 14 pro max",
     href: "",
     price: 250000,
@@ -185,6 +192,7 @@ let products = [
   },
   {
     id: 7,
+    sales: 10,
     name: "Uphone lightning cable",
     href: "",
     price: 10000,
@@ -216,6 +224,7 @@ let products = [
   },
   {
     id: 8,
+    sales: 30,
     name: "Smartphone Tecno Spark Go 2024",
     href: "",
     price: 65000,
@@ -244,6 +253,7 @@ let products = [
   },
   {
     id: 9,
+    sales: 100,
     name: "iPhone 14 pro max",
     href: "",
     price: 250000,
@@ -272,6 +282,7 @@ let products = [
   },
   {
     id: 10,
+    sales: 0,
     name: "Uphone lightning cable",
     href: "",
     price: 10000,
@@ -303,6 +314,7 @@ let products = [
   },
   {
     id: 11,
+    sales: 1,
     name: "Smartphone Tecno Spark Go 2024",
     href: "",
     price: 65000,
@@ -331,6 +343,7 @@ let products = [
   },
   {
     id: 12,
+    sales: 2,
     name: "iPhone 14 pro max",
     href: "",
     price: 250000,
@@ -359,6 +372,7 @@ let products = [
   },
   {
     id: 13,
+    sales: 3,
     name: "iPhone 14 pro max",
     href: "",
     price: 250000,
@@ -514,88 +528,116 @@ function updatePagination(currentPage, productsToDisplay) {
 
   let totalPages = Math.ceil(productsToDisplay.length / productsPerPage);
 
-  // Bouton Précédent
-  paginationContainer.innerHTML += `
-    <li class="${currentPage === 1 ? "disabled" : "prev"}">
-      <a href="#" data-page="${currentPage - 1}">
-        <i class="uil uil-angle-left"></i>
-      </a>
-    </li>
-  `;
-
-  // Boutons Numérotés
-  for (let i = 1; i <= totalPages; i++) {
+  if (totalPages > 0) {
+    // Bouton Précédent
     paginationContainer.innerHTML += `
-      <li>
-        <a href="#" class="${
-          i === currentPage ? "active" : ""
-        }" data-page="${i}">${i}</a>
+      <li class="${currentPage === 1 ? "disabled" : "prev"}" data-page="${
+      currentPage - 1
+    }">
+        <span><i class="uil uil-angle-left"></i></span>
       </li>
     `;
-  }
 
-  // Bouton Suivant
-  paginationContainer.innerHTML += `
-    <li class="${currentPage === totalPages ? "disabled" : "next"}">
-      <a href="#" data-page="${currentPage + 1}">
-        <i class="uil uil-angle-right"></i>
-      </a>
-    </li>
-  `;
+    if (totalPages <= 4) {
+      // Affichage normal si <= 4 pages
+      for (let i = 1; i <= totalPages; i++) {
+        paginationContainer.innerHTML += `
+          <li class="page-item ${
+            i === currentPage ? "active" : ""
+          }" data-page="${i}">
+            <span>${i}</span>
+          </li>
+        `;
+      }
+    } else {
+      // Toujours afficher la première page
+      paginationContainer.innerHTML += `
+        <li class="page-item ${
+          currentPage === 1 ? "active" : ""
+        }" data-page="1">
+          <span>1</span>
+        </li>
+      `;
 
-  // Mettre à jour le texte d'affichage des résultats
-  document.getElementById("orther-result").innerText = `Showing ${Math.min(
-    (currentPage - 1) * productsPerPage + 1,
-    productsToDisplay.length
-  )} - ${Math.min(
-    currentPage * productsPerPage,
-    productsToDisplay.length
-  )} of ${productsToDisplay.length} results`;
+      if (currentPage > 3) {
+        paginationContainer.innerHTML += `<li class="dots"><span>...</span></li>`;
+      }
 
-  document.getElementById("desktop-result").innerText = `Showing ${Math.min(
-    (currentPage - 1) * productsPerPage + 1,
-    productsToDisplay.length
-  )} - ${Math.min(
-    currentPage * productsPerPage,
-    productsToDisplay.length
-  )} of ${productsToDisplay.length} results`;
-}
+      let start = Math.max(2, currentPage - 1);
+      let end = Math.min(currentPage + 1, totalPages - 1);
 
-// Gestion des clics sur la pagination
-paginationContainer.addEventListener("click", (e) => {
-  e.preventDefault();
-  if (e.target.tagName === "A") {
-    let newPage = parseInt(e.target.getAttribute("data-page"));
-    if (
-      newPage >= 1 &&
-      newPage <= Math.ceil(products.length / productsPerPage)
-    ) {
-      currentPage = newPage;
-      displayProducts(currentPage);
+      for (let i = start; i <= end; i++) {
+        paginationContainer.innerHTML += `
+          <li class="page-item ${
+            i === currentPage ? "active" : ""
+          }" data-page="${i}">
+            <span>${i}</span>
+          </li>
+        `;
+      }
+
+      if (currentPage < totalPages - 2) {
+        paginationContainer.innerHTML += `<li class="dots"><span>...</span></li>`;
+      }
+
+      // Toujours afficher la dernière page
+      paginationContainer.innerHTML += `
+        <li class="page-item" data-page="${totalPages}">
+          <span>${totalPages}</span>
+        </li>
+      `;
     }
+
+    // Bouton Suivant
+    paginationContainer.innerHTML += `
+      <li class="${
+        currentPage === totalPages ? "disabled" : "next"
+      }" data-page="${currentPage + 1}">
+        <span><i class="uil uil-angle-right"></i></span>
+      </li>
+    `;
+
+    // Mettre à jour le texte d'affichage des résultats
+    document.getElementById("orther-result").innerText = `Showing ${Math.min(
+      (currentPage - 1) * productsPerPage + 1,
+      productsToDisplay.length
+    )} - ${Math.min(
+      currentPage * productsPerPage,
+      productsToDisplay.length
+    )} of ${productsToDisplay.length} results`;
+
+    document.getElementById("desktop-result").innerText = `Showing ${Math.min(
+      (currentPage - 1) * productsPerPage + 1,
+      productsToDisplay.length
+    )} - ${Math.min(
+      currentPage * productsPerPage,
+      productsToDisplay.length
+    )} of ${productsToDisplay.length} results`;
+  } else {
+    document.getElementById("orther-result").innerText = "";
+    document.getElementById("desktop-result").innerText = "";
   }
-});
+
+  // Gestion des clics sur la pagination
+  document.querySelectorAll(".page-item, .prev, .next").forEach((item) => {
+    item.addEventListener("click", (e) => {
+      e.preventDefault();
+      let newPage = parseInt(item.getAttribute("data-page"));
+      if (!isNaN(newPage) && newPage >= 1 && newPage <= totalPages) {
+        currentPage = newPage;
+        displayProducts(currentPage);
+      }
+    });
+  });
+}
 
 // Afficher la première page au chargement
 displayProducts(currentPage);
 
 // ==========================================================
 
-// document.getElementById("applyFiltre").addEventListener("click", () => {
-//   const container = document.querySelector(".selectedFilters");
-//   let filters = {};
-
-//   container.querySelectorAll(".filtre-item").forEach((filtre) => {
-//     let [key, ...values] = filtre.textContent.split(" -").map((v) => v.trim());
-//     filters[key] = values.length > 1 ? values : values[0];
-//   });
-
-//   console.log("Filtres appliqués :", filters);
-//   applyFilter(filters);
-// });
-
 function applyFilter(filters) {
-  let filteredProducts = products.filter((product) => {
+  filteredProducts = products.filter((product) => {
     return Object.entries(filters).every(([key, value]) => {
       if (key === "Prix") {
         let [min, max] = value.map((v) => parseInt(v.replace(" FCFA", "")));
@@ -613,4 +655,58 @@ function applyFilter(filters) {
 
   console.log("Produits filtrés :", filteredProducts);
   displayProducts(currentPage, filteredProducts);
+}
+
+document.getElementById("switchCategory").addEventListener("click", () => {
+  fondCategory.classList.toggle("show");
+  category.classList.toggle("show");
+});
+
+document.getElementById("SortBy").addEventListener("change", function () {
+  let sortBy = this.value;
+  sortProducts(sortBy);
+});
+
+function sortProducts(sortBy) {
+  // let sortedProducts = [...products];
+
+  let sortedProducts =
+    filteredProducts.length > 0 ? filteredProducts : products;
+
+  switch (sortBy) {
+    case "best-selling":
+      sortedProducts.sort((a, b) => (b.sales || 0) - (a.sales || 0));
+      break;
+
+    case "title-ascending":
+      sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+
+    case "title-descending":
+      sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
+      break;
+
+    case "price-ascending":
+      sortedProducts.sort((a, b) => a.price - b.price);
+      break;
+
+    case "price-descending":
+      sortedProducts.sort((a, b) => b.price - a.price);
+      break;
+
+    case "created-descending":
+      sortedProducts.sort((a, b) => b.id - a.id);
+      break;
+
+    case "created-ascending":
+      sortedProducts.sort((a, b) => a.id - b.id);
+      break;
+
+    default:
+      // "manual" ou valeur non reconnue : ne pas trier
+      break;
+  }
+
+  console.log("Produits triés :", sortedProducts);
+  displayProducts(currentPage, sortedProducts); // Affiche les produits triés
 }
