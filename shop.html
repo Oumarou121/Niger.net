@@ -160,7 +160,11 @@
         <label id="overlay" for="sidebar-active"></label>
         <div class="other-filtre">
           <div class="selectedFilters">
-            <div id="clearAllFilters" class="clearAll">
+            <div
+              id="clearAllFilters"
+              class="clearAll"
+              onclick="clearAllFilters()"
+            >
               <a href="#" class="all fs-poppins text-black">
                 <span class="txt">Effacer les filtres</span>
                 <i class="uil uil-trash"></i>
@@ -201,12 +205,27 @@
 
                 <div class="price-input">
                   <div class="field">
-                    <input type="number" class="input-min" value="2500" />
+                    <input
+                      type="number"
+                      class="input-min"
+                      value="2500"
+                      step="5000"
+                      step="500"
+                      min="2500"
+                      max="500000"
+                    />
                     <span>FCFA</span>
                   </div>
                   <!-- <div class="separator">-</div> -->
                   <div class="field">
-                    <input type="number" class="input-max" value="500000" />
+                    <input
+                      type="number"
+                      class="input-max"
+                      value="500000"
+                      step="500"
+                      min="2500"
+                      max="500000"
+                    />
                     <span>FCFA</span>
                   </div>
                 </div>
@@ -217,9 +236,9 @@
               </div>
             </div>
           </div>
-          <div class="otherConfirm">
-            <button type="button">Appliquer le filtre</button>
-          </div>
+          <!-- <div class="otherConfirm">
+            <button id="applyFiltre" type="button">Appliquer le filtre</button>
+          </div> -->
         </div>
       </header>
 
@@ -234,8 +253,12 @@
         <section class="shop-content">
           <div class="custom-container">
             <div class="shop-left">
-              <div class="">
-                <div id="clearAllDesktop" class="clearDesktop">
+              <div>
+                <div
+                  id="clearAllDesktop"
+                  class="clearDesktop"
+                  onclick="clearAllFilters()"
+                >
                   <i class="uil uil-trash-alt"></i>
                   CLEAR ALL
                 </div>
@@ -275,12 +298,26 @@
 
                     <div class="price-input-desktop">
                       <div class="field">
-                        <input type="number" class="input-min" value="2500" />
+                        <input
+                          type="number"
+                          class="input-min"
+                          value="2500"
+                          step="500"
+                          min="2500"
+                          max="500000"
+                        />
                         <span>FCFA</span>
                       </div>
                       <!-- <div class="separator">-</div> -->
                       <div class="field">
-                        <input type="number" class="input-max" value="500000" />
+                        <input
+                          type="number"
+                          class="input-max"
+                          value="500000"
+                          step="500"
+                          min="2500"
+                          max="500000"
+                        />
                         <span>FCFA</span>
                       </div>
                     </div>

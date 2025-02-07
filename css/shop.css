@@ -237,6 +237,10 @@
   display: block;
 }
 
+.shop-right {
+  flex: 1;
+}
+
 @media (min-width: 992px) {
   .shop-right {
     flex: 0 0 70%;
@@ -552,4 +556,30 @@ input[type="range"]::-webkit-slider-thumb {
 
 .selectedFilters {
   padding: 20px;
+}
+
+.no-results-container {
+  grid-column: span 3;
+  text-align: center;
+  padding: 30px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-results-container i {
+  font-size: 40px;
+  color: hsl(356.7 90.1% 56.5%);
+  margin-bottom: 10px;
+}
+
+.no-results-container p {
+  font-size: 16px;
+  color: #444;
+  font-weight: bold;
 }

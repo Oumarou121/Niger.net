@@ -5,7 +5,7 @@ const productsPerPage = 9;
 let currentPage = 1;
 const listProducts = document.getElementById("listProducts");
 const paginationContainer = document.querySelector(".shop_pagi ul");
-const products = [
+let products = [
   {
     id: 1,
     name: "Uphone lightning cable",
@@ -35,6 +35,7 @@ const products = [
       Garantie: "1 An",
       Couleur: "Noir",
       Availability: "Available In stock",
+      Access: "oui",
     },
   },
   {
@@ -63,6 +64,7 @@ const products = [
       "Ecran Tactile": "Oui",
       Réseau: "WiFi - Bluetooth",
       Caméra: "Rear Camera 12 MP + Front Camera 8 MP",
+      Access: "non",
     },
   },
   {
@@ -91,6 +93,7 @@ const products = [
       "Ecran Tactile": "Oui",
       Réseau: "WiFi - Bluetooth",
       Caméra: "Rear Camera 12 MP + Front Camera 8 MP",
+      Résolution: "Full HD",
     },
   },
   {
@@ -407,101 +410,109 @@ function formatPrice(price) {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-// Fonction pour afficher les produits selon la page actuelle
-function displayProducts(page) {
-  listProducts.classList.remove("show"); // Cache avec opacité 0
+function displayProducts(page, filteredProducts = null) {
+  listProducts.classList.remove("show");
   setTimeout(() => {
-    listProducts.innerHTML = ""; // Vider la liste
+    listProducts.innerHTML = "";
+
+    let productsToDisplay = filteredProducts || products;
 
     let start = (page - 1) * productsPerPage;
     let end = start + productsPerPage;
-    let paginatedItems = products.slice(start, end);
+    let paginatedItems = productsToDisplay.slice(start, end);
+
+    if (paginatedItems.length === 0) {
+      listProducts.innerHTML = `
+        <div class="no-results-container">
+        <i class="uil uil-search-alt"></i>
+          <p>Aucun produit ne correspond aux critères recherchés.</p>
+        </div>
+      `;
+    }
 
     paginatedItems.forEach((product) => {
       listProducts.innerHTML += `
     <div class="item">
       <div class="item-image">
-      <a href="${product.href ? `/shop/${product.href}` : "#"}">
-        <img
-          class="popup_cart_image default-img"
-          src="${product.image}"
-          alt="${product.name}"
-        />
+        <a href="${product.href ? `/shop/${product.href}` : "#"}">
+          <img
+            class="popup_cart_image default-img"
+            src="${product.image}"
+            alt="${product.name}"
+          />
 
-        <img
-          class="hover-img"
-          src="${product.imageHover}"
-          alt="${product.name}"
-        />
-      </a>
-      ${
-        product.priceReduction
-          ? `<span class="item-prev-price">
-               <span>-${formatPrice(product.priceReduction)} FCFA</span>
-             </span>`
-          : ""
-      }
-    </div>
-    <div class="item-body">
-      <h2 class="item-title">
-        <a href="${product.href ? product.href : "#"}">
-          ${product.name}
+          <img
+            class="hover-img"
+            src="${product.imageHover}"
+            alt="${product.name}"
+          />
         </a>
-      </h2>
-      <div class="item-price">
-        <span>${formatPrice(product.price)} FCFA</span>
+        ${
+          product.priceReduction
+            ? `<span class="item-prev-price">
+                 <span>-${formatPrice(product.priceReduction)} FCFA</span>
+               </span>`
+            : ""
+        }
       </div>
-      <div class="item-description">
-        ${product.description}
-      </div>
-      <div class="product-action">
-      <button
-      class="action_btn addCart"
-      aria-label="Add To Cart"
-      onclick="AddToCart(this)"
-    >
-      <i class="uil uil-shopping-bag"></i>
-      <span class="tooltip-text">Add To Cart</span>
-    </button>
-    
-
+      <div class="item-body">
+        <h2 class="item-title">
+          <a href="${product.href ? product.href : "#"}">
+            ${product.name}
+          </a>
+        </h2>
+        <div class="item-price">
+          <span>${formatPrice(product.price)} FCFA</span>
+        </div>
+        <div class="item-description">
+          ${product.description}
+        </div>
+        <div class="product-action">
         <button
-          class="action_btn addWishlist"
-          aria-label="Add To Wishlist"
-          onclick="AddToWish(this)"
-        >
-          <i class="uil uil-heart"></i>
-          <span class="tooltip-text">Add To Wishlist</span>
-        </button>
-        <button
-          class="action_btn compare_btn"
-          data-pid="${product.id}"
-          aria-label="Compare"
-          onclick="Compare(${product.id})"
-        >
-          <i class="uil uil-signal"></i>
-          <span class="tooltip-text">Compare</span>
-        </button>
+        class="action_btn addCart"
+        aria-label="Add To Cart"
+        onclick="AddToCart(this)"
+      >
+        <i class="uil uil-shopping-bag"></i>
+        <span class="tooltip-text">Add To Cart</span>
+      </button>
+      
+  
+          <button
+            class="action_btn addWishlist"
+            aria-label="Add To Wishlist"
+            onclick="AddToWish(this)"
+          >
+            <i class="uil uil-heart"></i>
+            <span class="tooltip-text">Add To Wishlist</span>
+          </button>
+          <button
+            class="action_btn compare_btn"
+            data-pid="${product.id}"
+            aria-label="Compare"
+            onclick="Compare(${product.id})"
+          >
+            <i class="uil uil-signal"></i>
+            <span class="tooltip-text">Compare</span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-    `;
+      `;
     });
 
     listProducts.classList.add("show");
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-    updatePagination(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    updatePagination(page, productsToDisplay);
   }, 300);
 }
 
-// Fonction pour générer la pagination
-function updatePagination(currentPage) {
+// Modification de la fonction de pagination pour accepter une liste de produits
+function updatePagination(currentPage, productsToDisplay) {
   paginationContainer.innerHTML = "";
 
-  let totalPages = Math.ceil(products.length / productsPerPage);
+  let totalPages = Math.ceil(productsToDisplay.length / productsPerPage);
 
   // Bouton Précédent
   paginationContainer.innerHTML += `
@@ -533,12 +544,21 @@ function updatePagination(currentPage) {
   `;
 
   // Mettre à jour le texte d'affichage des résultats
-  document.querySelector(".show-items").innerText = `Showing ${Math.min(
+  document.getElementById("orther-result").innerText = `Showing ${Math.min(
     (currentPage - 1) * productsPerPage + 1,
-    products.length
-  )} - ${Math.min(currentPage * productsPerPage, products.length)} of ${
-    products.length
-  } results`;
+    productsToDisplay.length
+  )} - ${Math.min(
+    currentPage * productsPerPage,
+    productsToDisplay.length
+  )} of ${productsToDisplay.length} results`;
+
+  document.getElementById("desktop-result").innerText = `Showing ${Math.min(
+    (currentPage - 1) * productsPerPage + 1,
+    productsToDisplay.length
+  )} - ${Math.min(
+    currentPage * productsPerPage,
+    productsToDisplay.length
+  )} of ${productsToDisplay.length} results`;
 }
 
 // Gestion des clics sur la pagination
@@ -561,179 +581,36 @@ displayProducts(currentPage);
 
 // ==========================================================
 
-// class Category {
-//   constructor(name, options = {}) {
-//     this.name = name;
-//     this.options = options;
-//     this.subCategories = [];
-//   }
+// document.getElementById("applyFiltre").addEventListener("click", () => {
+//   const container = document.querySelector(".selectedFilters");
+//   let filters = {};
 
-//   addSubCategory(subCategory) {
-//     this.subCategories.push(subCategory);
-//   }
+//   container.querySelectorAll(".filtre-item").forEach((filtre) => {
+//     let [key, ...values] = filtre.textContent.split(" -").map((v) => v.trim());
+//     filters[key] = values.length > 1 ? values : values[0];
+//   });
 
-//   createCategoryElement() {
-//     const categoryWrapper = document.createElement("div");
-//     categoryWrapper.classList.add("category-wrapper");
-
-//     const label = document.createElement("label");
-//     label.classList.add("category-label");
-
-//     const toggleIcon = document.createElement("span");
-//     toggleIcon.classList.add("toggle-icon");
-//     toggleIcon.textContent = this.subCategories.length ? "➕" : "⚪";
-
-//     const checkbox = document.createElement("input");
-//     checkbox.type = "checkbox";
-//     checkbox.dataset.category = this.name;
-
-//     label.appendChild(toggleIcon);
-//     label.appendChild(checkbox);
-//     label.append(` ${this.name}`);
-
-//     categoryWrapper.appendChild(label);
-
-//     const subCategoryContainer = document.createElement("div");
-//     subCategoryContainer.classList.add("sub-category-container");
-
-//     this.subCategories.forEach((sub) => {
-//       subCategoryContainer.appendChild(sub.createCategoryElement());
-//     });
-
-//     if (this.subCategories.length) {
-//       categoryWrapper.appendChild(subCategoryContainer);
-
-//       toggleIcon.addEventListener("click", () => {
-//         categoryWrapper.classList.toggle("open"); // Ajoute la classe open au wrapper entier
-//         toggleIcon.textContent = categoryWrapper.classList.contains("open")
-//           ? "➖"
-//           : "➕";
-//       });
-//     }
-
-//     checkbox.addEventListener("change", updateOptionsDisplay);
-
-//     return categoryWrapper;
-//   }
-
-//   getOptions() {
-//     return this.options;
-//   }
-// }
-
-// class SubCategory extends Category {}
-
-// const informatique = new Category("Informatique", {
-//   TypeDisque: ["SSD", "SSF"],
+//   console.log("Filtres appliqués :", filters);
+//   applyFilter(filters);
 // });
 
-// const Mobile = new Category("Informatique", {
-//   TypeDisque: ["SSD", "SSF"],
-// });
+function applyFilter(filters) {
+  let filteredProducts = products.filter((product) => {
+    return Object.entries(filters).every(([key, value]) => {
+      if (key === "Prix") {
+        let [min, max] = value.map((v) => parseInt(v.replace(" FCFA", "")));
+        return product.price >= min && product.price <= max;
+      }
 
-// const ordinateurPortable = new SubCategory("Ordinateur Portable", {
-//   Type: ["Ultrabook", "Standard"],
-// });
-// const ordinateurBureau = new SubCategory("Ordinateur Bureau", {
-//   Processeur: ["Intel", "AMD"],
-// });
-// const accessoiresPeripheriques = new SubCategory(
-//   "Accessoires et Périphériques",
-//   { Connexion: ["USB", "Bluetooth"] }
-// );
+      return (
+        product.species[key] &&
+        filters[key].some(
+          (v) => product.species[key].toLowerCase() === v.toLowerCase()
+        )
+      );
+    });
+  });
 
-// const pcPortable = new SubCategory("Pc Portable", {
-//   "Taille écran": ["13''", "15''", "17''"],
-// });
-// const pcPortableGamer = new SubCategory("Pc Portable Gamer", {
-//   "Carte graphique": ["RTX 4060", "RTX 4070"],
-// });
-
-// const ecran = new SubCategory("Ecran", { Résolution: ["1080p", "4K"] });
-// const pcBureau = new SubCategory("Pc Bureau", { Stockage: ["SSD", "HDD"] });
-// const pcBureauGamer = new SubCategory("Pc Bureau Gamer", {
-//   Refroidissement: ["Air", "Watercooling"],
-// });
-// const pcToutEnUn = new SubCategory("Pc Tout en Un", {
-//   "Écran tactile": ["Oui", "Non"],
-// });
-
-// const casque = new SubCategory("Casque", { Type: ["Filaire", "Sans fil"] });
-// const sacADos = new SubCategory("Sac à Dos", { Capacité: ["15L", "20L"] });
-// const sourisClavier = new SubCategory("Souris et Clavier", {
-//   RGB: ["Oui", "Non"],
-// });
-
-// informatique.addSubCategory(ordinateurPortable);
-// informatique.addSubCategory(ordinateurBureau);
-// informatique.addSubCategory(accessoiresPeripheriques);
-
-// ordinateurPortable.addSubCategory(pcPortable);
-// ordinateurPortable.addSubCategory(pcPortableGamer);
-
-// ordinateurBureau.addSubCategory(ecran);
-// ordinateurBureau.addSubCategory(pcBureau);
-// ordinateurBureau.addSubCategory(pcBureauGamer);
-// ordinateurBureau.addSubCategory(pcToutEnUn);
-
-// accessoiresPeripheriques.addSubCategory(casque);
-// accessoiresPeripheriques.addSubCategory(sacADos);
-// accessoiresPeripheriques.addSubCategory(sourisClavier);
-
-// function generateFilters() {
-//   document
-//     .querySelector(".category-container")
-//     .appendChild(informatique.createCategoryElement());
-// }
-
-// function updateOptionsDisplay() {
-//   const selectedOptions = document.querySelector(".selected-options");
-//   selectedOptions.innerHTML = "";
-
-//   document
-//     .querySelectorAll(".category-container input[type='checkbox']:checked")
-//     .forEach((checkbox) => {
-//       const category = findCategoryByName(
-//         informatique,
-//         checkbox.dataset.category
-//       );
-//       if (category) {
-//         Object.entries(category.getOptions()).forEach(([title, values]) => {
-//           const optionGroup = document.createElement("div");
-//           optionGroup.classList.add("option-group");
-
-//           const optionLabel = document.createElement("label");
-//           optionLabel.textContent = `${title} :`;
-//           optionGroup.appendChild(optionLabel);
-
-//           values.forEach((value) => {
-//             const valueLabel = document.createElement("label");
-//             valueLabel.classList.add("option-value");
-
-//             const checkbox = document.createElement("input");
-//             checkbox.type = "checkbox";
-//             checkbox.name = title;
-//             checkbox.value = value;
-
-//             valueLabel.appendChild(checkbox);
-//             valueLabel.append(` ${value}`);
-
-//             optionGroup.appendChild(valueLabel);
-//           });
-
-//           selectedOptions.appendChild(optionGroup);
-//         });
-//       }
-//     });
-// }
-
-// function findCategoryByName(category, name) {
-//   if (category.name === name) return category;
-//   for (let sub of category.subCategories) {
-//     const found = findCategoryByName(sub, name);
-//     if (found) return found;
-//   }
-//   return null;
-// }
-
-// document.addEventListener("DOMContentLoaded", generateFilters);
+  console.log("Produits filtrés :", filteredProducts);
+  displayProducts(currentPage, filteredProducts);
+}

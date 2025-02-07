@@ -1,3 +1,14 @@
+const filtresContent = document.getElementById("filter-container");
+const filtresContentDesktop = document.getElementById(
+  "filter-containerDesktop"
+);
+const clearAllBtn = document.getElementById("clearAllFilters");
+const clearAllBtnDesktop = document.getElementById("clearAllDesktop");
+const selectedFilters = document.querySelector(".selectedFilters");
+const selectedFiltersDesktop = document.querySelector(
+  ".selectedFilters-desktop"
+);
+
 class Filtres {
   constructor() {
     this.categories = [];
@@ -66,19 +77,8 @@ informatique.addSubCategory(ordinateurBureau);
 informatique.addSubCategory(Iaccessoirs);
 ordinateurPortable.addOption(new Option("Access", ["oui", "non"]));
 ordinateurPortable.addOption(new Option("Stockage", ["SSD", "HDD"]));
-ordinateurPortable.addOption(
-  new Option("Résolution", ["1080p", "2k", "4K", "Full HD"])
-);
-ordinateurPortable.addOption(new Option("Access", ["oui", "non"]));
-ordinateurPortable.addOption(new Option("Stockage", ["SSD", "HDD"]));
-ordinateurPortable.addOption(
-  new Option("Résolution", ["1080p", "2k", "4K", "Full HD"])
-);
-ordinateurPortable.addOption(new Option("Access", ["oui", "non"]));
-ordinateurPortable.addOption(new Option("Stockage", ["SSD", "HDD"]));
-ordinateurPortable.addOption(
-  new Option("Résolution", ["1080p", "2k", "4K", "Full HD"])
-);
+informatique.addOption(new Option("Résolution", ["1080p", "2k", "4K"]));
+ordinateurPortable.addOption(new Option("Résolution", ["Full HD"]));
 
 ordinateurPortable.addSubCategory(new SubCategory("Pc Portable"));
 ordinateurPortable.addSubCategory(new SubCategory("Pc Portable Gamer"));
@@ -173,17 +173,11 @@ function generateCategoryList(categories, parentElement, isDesktop = false) {
     li.appendChild(ul);
     parentElement.appendChild(li);
 
-    generateSubCategoryList(category, ul, false, isDesktop, [category.name]);
+    generateSubCategoryList(category, ul, isDesktop, [category.name]);
   });
 }
 
-function generateSubCategoryList(
-  category,
-  parentElement,
-  isNested,
-  isDesktop,
-  path
-) {
+function generateSubCategoryList(category, parentElement, isDesktop, path) {
   category.getSubCategory().forEach((subCategory) => {
     const li = document.createElement("li");
     const aSub = document.createElement("a");
@@ -205,7 +199,7 @@ function generateSubCategoryList(
     li.appendChild(ul);
     parentElement.appendChild(li);
 
-    generateSubCategoryList(subCategory, ul, true, isDesktop, newPath);
+    generateSubCategoryList(subCategory, ul, isDesktop, newPath);
   });
 }
 
@@ -275,12 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
       categoryPath1
     );
 
-    const filtresContent = document.getElementById("filter-container");
-    const filtresContentDesktop = document.getElementById(
-      "filter-containerDesktop"
-    );
-    parcoursCategory(currentCategory, filtresContent, false);
-    parcoursCategory(currentCategory, filtresContentDesktop, true);
+    parcoursCategory(currentCategory);
   }
 
   loadCategory();
@@ -304,98 +293,282 @@ function findCategory(categories, path) {
   return foundCategory;
 }
 
-function parcoursCategory(category, container, isDesktop) {
+function parcoursCategory(category) {
   category.getOptions().forEach((option) => {
-    addOptionsToDisplay(option, container, isDesktop);
+    addOptionsToDisplay(option);
   });
 
   category.getSubCategory().forEach((subCategory) => {
-    parcoursCategory(subCategory, container, isDesktop);
+    parcoursCategory(subCategory);
   });
 }
 
-function addOptionsToDisplay(option, container, isDesktop) {
-  const optionSection = document.createElement("div");
-  optionSection.classList.add("categories");
+function addOptionsToDisplay(option) {
+  let isOld = false;
+  filtresContent.querySelectorAll(".categories").forEach((category, index) => {
+    if (
+      category.querySelector(".filtre-top h3").textContent === option.getTitle()
+    ) {
+      option.getValues().forEach((value) => {
+        const listItem = document.createElement("li");
+        const listItemDesktop = document.createElement("li");
 
-  const optionTitleDiv = document.createElement("div");
-  optionTitleDiv.classList.add("filtre-top");
+        const optionCheckbox = document.createElement("input");
+        optionCheckbox.type = "checkbox";
+        optionCheckbox.name = option.getTitle();
+        const optionCheckboxDesktop = document.createElement("input");
+        optionCheckboxDesktop.type = "checkbox";
+        optionCheckboxDesktop.name = option.getTitle();
 
-  const optionTitle = document.createElement("h3");
-  optionTitle.textContent = option.getTitle();
-  optionTitleDiv.appendChild(optionTitle);
+        const optionLabel = document.createElement("span");
+        optionLabel.textContent = ` ${value}`;
+        const optionLabelDesktop = document.createElement("span");
+        optionLabelDesktop.textContent = ` ${value}`;
+        optionCheckbox.addEventListener("change", () => {
+          optionCheckboxDesktop.checked = optionCheckbox.checked;
+          createItemy(
+            optionCheckbox,
+            optionCheckboxDesktop,
+            option.getTitle(),
+            value
+          );
+        });
 
-  if (!isDesktop) {
+        optionCheckboxDesktop.addEventListener("change", () => {
+          optionCheckbox.checked = optionCheckboxDesktop.checked;
+          createItemy(
+            optionCheckbox,
+            optionCheckboxDesktop,
+            option.getTitle(),
+            value
+          );
+        });
+
+        listItem.appendChild(optionCheckbox);
+        listItem.appendChild(optionLabel);
+        listItemDesktop.appendChild(optionCheckboxDesktop);
+        listItemDesktop.appendChild(optionLabelDesktop);
+        category.querySelector(".filter-content ul").appendChild(listItem);
+        filtresContentDesktop
+          .querySelectorAll(".categories")
+          [index].querySelector(".filter-content ul")
+          .appendChild(listItemDesktop);
+        isOld = true;
+      });
+    }
+  });
+
+  if (!isOld) {
+    const optionSection = document.createElement("div");
+    optionSection.classList.add("categories");
+    const optionSectionDesktop = document.createElement("div");
+    optionSectionDesktop.classList.add("categories");
+
+    const optionTitleDiv = document.createElement("div");
+    optionTitleDiv.classList.add("filtre-top");
+    const optionTitleDivDesktop = document.createElement("div");
+    optionTitleDivDesktop.classList.add("filtre-top");
+
+    const optionTitle = document.createElement("h3");
+    optionTitle.textContent = option.getTitle();
+    optionTitleDiv.appendChild(optionTitle);
+    const optionTitleDesktop = document.createElement("h3");
+    optionTitleDesktop.textContent = option.getTitle();
+    optionTitleDivDesktop.appendChild(optionTitleDesktop);
+
     const optionIcon = document.createElement("i");
     optionIcon.classList.add("uil", "icon-arrow", "uil-angle-down");
-
     optionTitleDiv.appendChild(optionIcon);
-
     optionTitleDiv.addEventListener("click", () => {
       const contentDiv = optionSection.querySelector(".filter-content");
       contentDiv.classList.toggle("visible");
-
       optionIcon.classList.toggle("rotated");
     });
-  }
+    optionSection.appendChild(optionTitleDiv);
+    optionSectionDesktop.appendChild(optionTitleDivDesktop);
 
-  optionSection.appendChild(optionTitleDiv);
+    const optionContentDiv = document.createElement("div");
+    optionContentDiv.classList.add("filter-content");
+    const optionContentDivDesktop = document.createElement("div");
+    optionContentDivDesktop.classList.add("filter-content");
 
-  // Créer le contenu de la liste (processeur-content)
-  const optionContentDiv = document.createElement("div");
-  optionContentDiv.classList.add("filter-content");
+    const optionList = document.createElement("ul");
+    const optionListDesktop = document.createElement("ul");
 
-  const optionList = document.createElement("ul");
-  option.getValues().forEach((value) => {
-    const listItem = document.createElement("li");
+    option.getValues().forEach((value) => {
+      const listItem = document.createElement("li");
+      const listItemDesktop = document.createElement("li");
 
-    const optionCheckbox = document.createElement("input");
-    optionCheckbox.type = "checkbox";
-    optionCheckbox.name = option.getTitle();
+      const optionCheckbox = document.createElement("input");
+      optionCheckbox.type = "checkbox";
+      optionCheckbox.name = option.getTitle();
+      const optionCheckboxDesktop = document.createElement("input");
+      optionCheckboxDesktop.type = "checkbox";
+      optionCheckboxDesktop.name = option.getTitle();
 
-    const optionLabel = document.createElement("span");
-    optionLabel.textContent = ` ${value}`;
-    optionCheckbox.addEventListener("change", () => {
-      createItemy(optionCheckbox, option.getTitle(), value, isDesktop);
+      const optionLabel = document.createElement("span");
+      optionLabel.textContent = ` ${value}`;
+      const optionLabelDesktop = document.createElement("span");
+      optionLabelDesktop.textContent = ` ${value}`;
+      optionCheckbox.addEventListener("change", () => {
+        optionCheckboxDesktop.checked = optionCheckbox.checked;
+        createItemy(
+          optionCheckbox,
+          optionCheckboxDesktop,
+          option.getTitle(),
+          value
+        );
+      });
+      optionCheckboxDesktop.addEventListener("change", () => {
+        optionCheckbox.checked = optionCheckboxDesktop.checked;
+        createItemy(
+          optionCheckbox,
+          optionCheckboxDesktop,
+          option.getTitle(),
+          value
+        );
+      });
+
+      listItem.appendChild(optionCheckbox);
+      listItem.appendChild(optionLabel);
+      optionList.appendChild(listItem);
+      listItemDesktop.appendChild(optionCheckboxDesktop);
+      listItemDesktop.appendChild(optionLabelDesktop);
+      optionListDesktop.appendChild(listItemDesktop);
     });
-    listItem.appendChild(optionCheckbox);
-    listItem.appendChild(optionLabel);
-    optionList.appendChild(listItem);
-  });
 
-  optionContentDiv.appendChild(optionList);
-  optionSection.appendChild(optionContentDiv);
+    optionContentDiv.appendChild(optionList);
+    optionSection.appendChild(optionContentDiv);
+    optionContentDivDesktop.appendChild(optionListDesktop);
+    optionSectionDesktop.appendChild(optionContentDivDesktop);
 
-  const hr = document.createElement("hr");
-  hr.classList.add("custom-hr");
-  optionSection.appendChild(hr);
+    const hr = document.createElement("hr");
+    hr.classList.add("custom-hr");
+    optionSection.appendChild(hr);
+    const hrDesktop = document.createElement("hr");
+    hrDesktop.classList.add("custom-hr");
+    optionSectionDesktop.appendChild(hrDesktop);
 
-  container.appendChild(optionSection);
+    filtresContent.appendChild(optionSection);
+    filtresContentDesktop.appendChild(optionSectionDesktop);
+  }
 }
 
-function createItemy(optionCheckbox, title, value, isDesktop) {
-  if (optionCheckbox.checked) {
+function createItemy(optionCheckbox, optionCheckboxDesktop, title, value) {
+  if (optionCheckbox.checked && optionCheckboxDesktop.checked) {
     const filterItem = document.createElement("div");
-    filterItem.classList.add(isDesktop ? "filtre-item-desktop" : "filtre-item");
+    const filterItemDesktop = document.createElement("div");
+
+    filterItem.classList.add("filtre-item");
     filterItem.textContent = `${title}  - ${value}`;
+    filterItemDesktop.classList.add("filtre-item-desktop");
+    filterItemDesktop.textContent = `${title}  - ${value}`;
+
     const removeBtn = document.createElement("i");
     removeBtn.classList.add("uil", "uil-times");
+    const removeBtnDesktop = document.createElement("i");
+    removeBtnDesktop.classList.add("uil", "uil-times");
+
     removeBtn.addEventListener("click", () => {
       filterItem.remove();
+      filterItemDesktop.remove();
       optionCheckbox.checked = false;
+      optionCheckboxDesktop.checked = false;
+      applyFilterOther();
     });
+    removeBtnDesktop.addEventListener("click", () => {
+      filterItem.remove();
+      filterItemDesktop.remove();
+      optionCheckbox.checked = false;
+      optionCheckboxDesktop.checked = false;
+      applyFilterOther();
+    });
+
     filterItem.appendChild(removeBtn);
-    isDesktop
-      ? selectedFiltersClassDesktop.appendChild(filterItem)
-      : selectedFiltersClass.appendChild(filterItem);
+    filterItemDesktop.appendChild(removeBtnDesktop);
+
+    selectedFiltersClass.appendChild(filterItem);
+    selectedFiltersClassDesktop.appendChild(filterItemDesktop);
+
     optionCheckbox.filterItem = filterItem;
+    optionCheckboxDesktop.filterItem = filterItemDesktop;
   } else {
     optionCheckbox.filterItem.remove();
+    optionCheckboxDesktop.filterItem.remove();
   }
-}
-// ===============================================================================================
 
-function updatePriceFilter(min, max, isDesktop = false) {
+  applyFilterOther();
+}
+
+// ===============================================================================================
+const priceGap = 5000;
+
+function syncPriceFilters(min, max) {
+  [false, true].forEach((isDesktop) => {
+    updatePriceFilter(min, max, isDesktop);
+    updateInputsAndSliders(min, max, isDesktop);
+    if (min === 2500 && max === 500000) {
+      resetFilters();
+    }
+  });
+}
+
+function updateInputsAndSliders(min, max, isDesktop) {
+  const rangeInputs = document.querySelectorAll(
+    isDesktop ? ".range-input-desktop input" : ".range-input input"
+  );
+  const priceInputs = document.querySelectorAll(
+    isDesktop ? ".price-input-desktop input" : ".price-input input"
+  );
+  const range = document.querySelector(
+    isDesktop ? ".slider-desktop .progress" : ".slider .progress"
+  );
+
+  rangeInputs[0].value = min;
+  rangeInputs[1].value = max;
+  priceInputs[0].value = min;
+  priceInputs[1].value = max;
+
+  range.style.left = (min / rangeInputs[0].max) * 100 + "%";
+  range.style.right = 100 - (max / rangeInputs[1].max) * 100 + "%";
+}
+
+function setupPriceInputsAndSliders(isDesktop = false) {
+  const rangeInputs = document.querySelectorAll(
+    isDesktop ? ".range-input-desktop input" : ".range-input input"
+  );
+  const priceInputs = document.querySelectorAll(
+    isDesktop ? ".price-input-desktop input" : ".price-input input"
+  );
+
+  priceInputs.forEach((input, index) => {
+    input.addEventListener("input", () => {
+      let minPrice = parseInt(priceInputs[0].value),
+        maxPrice = parseInt(priceInputs[1].value);
+
+      if (maxPrice - minPrice >= priceGap && maxPrice <= rangeInputs[1].max) {
+        rangeInputs[0].value = minPrice;
+        rangeInputs[1].value = maxPrice;
+        syncPriceFilters(minPrice, maxPrice);
+      }
+    });
+  });
+
+  rangeInputs.forEach((input, index) => {
+    input.addEventListener("input", () => {
+      let minVal = parseInt(rangeInputs[0].value),
+        maxVal = parseInt(rangeInputs[1].value);
+
+      if (maxVal - minVal < priceGap) {
+        rangeInputs[index].value =
+          index === 0 ? maxVal - priceGap : minVal + priceGap;
+      }
+      syncPriceFilters(rangeInputs[0].value, rangeInputs[1].value);
+    });
+  });
+}
+
+function updatePriceFilter(min, max, isDesktop) {
   const filterClass = isDesktop
     ? ".filtre-item-desktop.price"
     : ".filtre-item.price";
@@ -421,157 +594,61 @@ function updatePriceFilter(min, max, isDesktop = false) {
     removeBtn.classList.add("uil", "uil-times");
     removeBtn.style.cursor = "pointer";
     removeBtn.addEventListener("click", () => {
-      const rangeInputs = document.querySelectorAll(
-        isDesktop ? ".range-input-desktop input" : ".range-input input"
-      );
-      const priceInputs = document.querySelectorAll(
-        isDesktop ? ".price-input-desktop input" : ".price-input input"
-      );
-      rangeInputs[0].value = rangeInputs[0].min;
-      rangeInputs[1].value = rangeInputs[1].max;
-      priceInputs[0].value = rangeInputs[0].min;
-      priceInputs[1].value = rangeInputs[1].max;
-      updatePriceSlider(isDesktop);
-      priceFilterItem.remove();
+      resetFilters();
     });
 
     priceFilterItem.appendChild(filterContent);
     priceFilterItem.appendChild(removeBtn);
 
-    document.querySelector(selectedFiltersClass).appendChild(priceFilterItem);
+    isDesktop
+      ? selectedFiltersDesktop.appendChild(priceFilterItem)
+      : selectedFilters.appendChild(priceFilterItem);
   }
 
   const filterContent = priceFilterItem.querySelector(
     isDesktop ? ".filter-content-desktop" : ".filter-content1"
   );
   filterContent.textContent = `Prix - ${min} - ${max} FCFA`;
+  applyFilterOther();
 }
 
-function updatePriceSlider(isDesktop = false) {
-  const rangeInputs = document.querySelectorAll(
-    isDesktop ? ".range-input-desktop input" : ".range-input input"
-  );
-  const priceInputs = document.querySelectorAll(
-    isDesktop ? ".price-input-desktop input" : ".price-input input"
-  );
-  const range = document.querySelector(
-    isDesktop ? ".slider-desktop .progress" : ".slider .progress"
-  );
+function resetFilters() {
+  [false, true].forEach((isDesktop) => {
+    const rangeInputs = document.querySelectorAll(
+      isDesktop ? ".range-input-desktop input" : ".range-input input"
+    );
+    const priceInputs = document.querySelectorAll(
+      isDesktop ? ".price-input-desktop input" : ".price-input input"
+    );
+    rangeInputs[0].value = rangeInputs[0].min;
+    rangeInputs[1].value = rangeInputs[1].max;
+    priceInputs[0].value = rangeInputs[0].min;
+    priceInputs[1].value = rangeInputs[1].max;
+    updateInputsAndSliders(rangeInputs[0].min, rangeInputs[1].max, isDesktop);
 
-  let minVal = parseInt(rangeInputs[0].value);
-  let maxVal = parseInt(rangeInputs[1].value);
-  priceInputs[0].value = minVal;
-  priceInputs[1].value = maxVal;
-
-  range.style.left = (minVal / rangeInputs[0].max) * 100 + "%";
-  range.style.right = 100 - (maxVal / rangeInputs[1].max) * 100 + "%";
-
-  updatePriceFilter(minVal, maxVal, isDesktop);
-}
-
-function ClearUpdatePriceSlider(isDesktop = false) {
-  const rangeInputs = document.querySelectorAll(
-    isDesktop ? ".range-input-desktop input" : ".range-input input"
-  );
-  const priceInputs = document.querySelectorAll(
-    isDesktop ? ".price-input-desktop input" : ".price-input input"
-  );
-  const range = document.querySelector(
-    isDesktop ? ".slider-desktop .progress" : ".slider .progress"
-  );
-
-  rangeInputs[0].value = rangeInputs[0].min;
-  rangeInputs[1].value = rangeInputs[1].max;
-  priceInputs[0].value = rangeInputs[0].min;
-  priceInputs[1].value = rangeInputs[1].max;
-  updatePriceSlider(isDesktop);
-
-  updatePriceFilter(rangeInputs[0].min, rangeInputs[1].max, isDesktop);
-}
-
-const priceGap = 5000;
-
-function setupPriceInputsAndSliders(isDesktop = false) {
-  const rangeInputs = document.querySelectorAll(
-    isDesktop ? ".range-input-desktop input" : ".range-input input"
-  );
-  const priceInputs = document.querySelectorAll(
-    isDesktop ? ".price-input-desktop input" : ".price-input input"
-  );
-
-  priceInputs.forEach((input) => {
-    input.addEventListener("input", (e) => {
-      let minPrice = parseInt(priceInputs[0].value),
-        maxPrice = parseInt(priceInputs[1].value);
-
-      if (maxPrice - minPrice >= priceGap && maxPrice <= rangeInputs[1].max) {
-        if (e.target.className === (isDesktop ? "input-min" : "input-min")) {
-          rangeInputs[0].value = minPrice;
-        } else {
-          rangeInputs[1].value = maxPrice;
-        }
-        updatePriceSlider(isDesktop);
-      }
-    });
-  });
-
-  rangeInputs.forEach((input) => {
-    input.addEventListener("input", (e) => {
-      let minVal = parseInt(rangeInputs[0].value),
-        maxVal = parseInt(rangeInputs[1].value);
-
-      if (maxVal - minVal < priceGap) {
-        if (e.target.className === (isDesktop ? "range-min" : "range-min")) {
-          rangeInputs[0].value = maxVal - priceGap;
-        } else {
-          rangeInputs[1].value = minVal + priceGap;
-        }
-      }
-      updatePriceSlider(isDesktop);
-    });
+    const filterItem = document.querySelector(
+      isDesktop ? ".filtre-item-desktop.price" : ".filtre-item.price"
+    );
+    if (filterItem) filterItem.remove();
   });
 }
 
-setupPriceInputsAndSliders();
+// Initialisation pour les deux versions
+setupPriceInputsAndSliders(false);
 setupPriceInputsAndSliders(true);
+
 // ================================================================================================
 
-const filtresContent = document.getElementById("filter-container");
-const filtresContentDesktop = document.getElementById(
-  "filter-containerDesktop"
-);
-const clearAllBtn = document.getElementById("clearAllFilters");
-const clearAllBtnDesktop = document.getElementById("clearAllDesktop");
-
-clearAllBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  const container = document.querySelector(".selectedFilters");
-  const rangeInputs = document.querySelectorAll(".range-input input");
-  const priceInputs = document.querySelectorAll(".price-input input");
-  rangeInputs[0].value = rangeInputs[0].min;
-  rangeInputs[1].value = rangeInputs[1].max;
-  priceInputs[0].value = rangeInputs[0].min;
-  priceInputs[1].value = rangeInputs[1].max;
-  updatePriceSlider();
-  container.querySelectorAll(".filtre-item").forEach((item) => item.remove());
+function clearAllFilters() {
+  resetFilters();
+  selectedFilters
+    .querySelectorAll(".filtre-item")
+    .forEach((item) => item.remove());
   filtresContent.querySelectorAll('[type="checkbox"]').forEach((input) => {
     input.checked ? (input.checked = false) : null;
   });
-});
 
-clearAllBtnDesktop.addEventListener("click", (e) => {
-  e.preventDefault();
-
-  const container = document.querySelector(".selectedFilters-desktop");
-  const rangeInputs = document.querySelectorAll(".range-input-desktop input");
-  const priceInputs = document.querySelectorAll(".price-input-desktop input");
-  rangeInputs[0].value = rangeInputs[0].min;
-  rangeInputs[1].value = rangeInputs[1].max;
-  priceInputs[0].value = rangeInputs[0].min;
-  priceInputs[1].value = rangeInputs[1].max;
-  updatePriceSlider(true);
-  container
+  selectedFiltersDesktop
     .querySelectorAll(".filtre-item-desktop")
     .forEach((item) => item.remove());
   console.log(filtresContentDesktop);
@@ -580,4 +657,22 @@ clearAllBtnDesktop.addEventListener("click", (e) => {
     .forEach((input) => {
       input.checked ? (input.checked = false) : null;
     });
-});
+  applyFilterOther();
+}
+
+function applyFilterOther() {
+  const container = document.querySelector(".selectedFilters-desktop");
+  let filters = {};
+
+  container.querySelectorAll(".filtre-item-desktop").forEach((filtre) => {
+    let [key, ...values] = filtre.textContent.split(" -").map((v) => v.trim());
+    // filters[key] = values.length > 1 ? values : values[0];
+    if (!filters[key]) {
+      filters[key] = [];
+    }
+    filters[key].push(...values);
+  });
+
+  console.log("Filtres appliqués :", filters);
+  applyFilter(filters);
+}
