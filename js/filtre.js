@@ -183,7 +183,7 @@ function generateSubCategoryList(category, parentElement, isDesktop, path) {
     const aSub = document.createElement("a");
     aSub.textContent = subCategory.name;
 
-    const newPath = [...path, subCategory.name]; // Ajout de la sous-catégorie au chemin
+    const newPath = [...path, subCategory.name];
     aSub.href = `shop.html?category=${encodeURIComponent(newPath.join("/"))}`;
 
     const ul = document.createElement("ul");
@@ -233,36 +233,44 @@ document.addEventListener("DOMContentLoaded", function () {
   );
 
   function updateBreadcrumb(categoryPath) {
-    breadcrumbContainer.innerHTML = "";
+    if (breadcrumbContainer) {
+      breadcrumbContainer.innerHTML = "";
 
-    const paths = ["Home", "Shop", ...categoryPath.split("/")].filter(Boolean);
+      const paths = ["Home", "Shop", ...categoryPath.split("/")].filter(
+        Boolean
+      );
 
-    paths.forEach((path, index) => {
-      const isLast = index === paths.length - 1;
-      const a = document.createElement("a");
-      a.textContent = path;
+      paths.forEach((path, index) => {
+        const isLast = index === paths.length - 1;
+        const a = document.createElement("a");
+        a.textContent = path;
 
-      if (!isLast) {
-        if (index === 0) {
-          a.href = "index.html";
-        } else if (index === 1) {
-          a.href = "shop.html";
+        if (!isLast) {
+          if (index === 0) {
+            a.href = "index.html";
+          } else if (index === 1) {
+            a.href = "shop.html";
+          } else {
+            a.href = `shop.html?category=${paths
+              .slice(2, index + 1)
+              .join("/")}`;
+          }
         } else {
-          a.href = `shop.html?category=${paths.slice(2, index + 1).join("/")}`;
+          a.classList.add("text-red");
         }
-      } else {
-        a.classList.add("text-red");
-      }
 
-      breadcrumbContainer.appendChild(a);
-      if (!isLast) breadcrumbContainer.innerHTML += " <span>|</span> ";
-    });
+        breadcrumbContainer.appendChild(a);
+        if (!isLast) breadcrumbContainer.innerHTML += " <span>|</span> ";
+      });
+    }
   }
 
   function loadCategory() {
     const params = new URLSearchParams(window.location.search);
     const categoryPath = params.get("category") || "";
     updateBreadcrumb(categoryPath);
+    // console.log(categoryPath);
+    applyFilter(null, categoryPath, true);
     const categoryPath1 = getCurrentCategoryPath();
     const currentCategory = findCategory(
       filtres.generateFilters(),
@@ -294,13 +302,15 @@ function findCategory(categories, path) {
 }
 
 function parcoursCategory(category) {
-  category.getOptions().forEach((option) => {
-    addOptionsToDisplay(option);
-  });
+  if (category) {
+    category.getOptions().forEach((option) => {
+      addOptionsToDisplay(option);
+    });
 
-  category.getSubCategory().forEach((subCategory) => {
-    parcoursCategory(subCategory);
-  });
+    category.getSubCategory().forEach((subCategory) => {
+      parcoursCategory(subCategory);
+    });
+  }
 }
 
 function addOptionsToDisplay(option) {

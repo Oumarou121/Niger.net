@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shop</title>
+    <title>Product</title>
     <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/shop.css" />
+    <link rel="stylesheet" href="css/product.css" />
 
     <!--============Icon Cdn==============-->
     <link
@@ -26,6 +26,16 @@
       rel="stylesheet"
     />
     <!--============Google Fonts==============-->
+    <!-- <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick-theme.css"
+    /> -->
   </head>
   <body>
     <!-- ============Preloader============ -->
@@ -151,241 +161,196 @@
             <ul id="category-list"></ul>
           </div>
         </div>
-
-        <input type="checkbox" id="sidebar-active" hidden />
-        <label id="overlay" for="sidebar-active"></label>
-        <div class="other-filtre">
-          <div class="selectedFilters">
-            <div
-              id="clearAllFilters"
-              class="clearAll"
-              onclick="clearAllFilters()"
-            >
-              <a href="#" class="all fs-poppins text-black">
-                <span class="txt">Effacer les filtres</span>
-                <i class="uil uil-trash"></i>
-              </a>
-            </div>
-          </div>
-          <div id="filter-container" class="filter-container">
-            <!-- Prix -->
-            <div class="categories">
-              <div class="filtre-top">
-                <h3>Prix</h3>
-                <i class="uil icon-arrow rotated uil-angle-down"></i>
-              </div>
-
-              <div class="price-content visible">
-                <div class="slider">
-                  <div class="progress"></div>
-                </div>
-
-                <div class="range-input">
-                  <input
-                    type="range"
-                    class="range-min"
-                    min="2500"
-                    max="500000"
-                    value="2500"
-                    step="5000"
-                  />
-                  <input
-                    type="range"
-                    class="range-max"
-                    min="0"
-                    max="500000"
-                    value="500000"
-                    step="5000"
-                  />
-                </div>
-
-                <div class="price-input">
-                  <div class="field">
-                    <input
-                      type="number"
-                      class="input-min"
-                      value="2500"
-                      step="5000"
-                      step="500"
-                      min="2500"
-                      max="500000"
-                    />
-                    <span>FCFA</span>
-                  </div>
-                  <div class="field">
-                    <input
-                      type="number"
-                      class="input-max"
-                      value="500000"
-                      step="500"
-                      min="2500"
-                      max="500000"
-                    />
-                    <span>FCFA</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <hr class="custom-hr" />
-              </div>
-            </div>
-          </div>
-          <div class="otherConfirm">
-            <button id="switchCategory" type="button">
-              Changer de Categorie
-            </button>
-          </div>
-        </div>
       </header>
 
       <main id="main">
-        <section class="shop-feature mb-40">
+        <section class="product-feature mb-40">
           <div class="custom-container">
-            <a href="index.html">Home</a> <span>/</span>
-            <span class="text-red">Shop</span>
+            <a href="index.html">Home</a> <span>|</span>
+            <span id="productName" class="text-red"></span>
           </div>
         </section>
 
-        <section class="shop-content">
+        <section class="product-content">
           <div class="custom-container">
-            <div class="shop-left">
-              <div>
-                <div
-                  id="clearAllDesktop"
-                  class="clearDesktop"
-                  onclick="clearAllFilters()"
-                >
-                  <i class="uil uil-trash-alt"></i>
-                  CLEAR ALL
-                </div>
-                <div class="selectedFilters-desktop"></div>
-              </div>
+            <!-- <div class="product-top">
+              <div class="product-left">
+                <div class="product-image">
+                  <img
+                    src="//drou-electronics-store.myshopify.com/cdn/shop/products/p4_c46c6d30-4b9f-4971-96be-d28d9f0d5ee5_large.jpg?v=1674275311"
+                    alt="image principale"
+                    id="main-image"
+                  />
+                  <div class="product-action">
+                    <button
+                      class="action_btn addCart"
+                      aria-label="Add To Cart"
+                      onclick="AddToCart(this)"
+                    >
+                      <i class="uil uil-shopping-bag"></i>
+                      <span class="tooltip-text">Add To Cart</span>
+                    </button>
 
-              <div id="filter-containerDesktop" class="filter-container">
-                <!-- Prix -->
-                <div class="categories">
-                  <div class="filtre-top">
-                    <h3>Prix</h3>
+                    <button
+                      class="action_btn addWishlist"
+                      aria-label="Add To Wishlist"
+                      onclick="AddToWish(this)"
+                    >
+                      <i class="uil uil-heart"></i>
+                      <span class="tooltip-text">Add To Wishlist</span>
+                    </button>
+                    <button
+                      class="action_btn compare_btn"
+                      aria-label="Compare"
+                      onclick="Compare(0)"
+                    >
+                      <i class="uil uil-signal"></i>
+                      <span class="tooltip-text">Compare</span>
+                    </button>
                   </div>
+                </div>
 
-                  <div class="price-content-desktop visible">
-                    <div class="slider-desktop">
-                      <div class="progress"></div>
-                    </div>
-
-                    <div class="range-input-desktop">
-                      <input
-                        type="range"
-                        class="range-min"
-                        min="2500"
-                        max="500000"
-                        value="2500"
-                        step="5000"
-                      />
-                      <input
-                        type="range"
-                        class="range-max"
-                        min="0"
-                        max="500000"
-                        value="500000"
-                        step="5000"
-                      />
-                    </div>
-
-                    <div class="price-input-desktop">
-                      <div class="field">
-                        <input
-                          type="number"
-                          class="input-min"
-                          value="2500"
-                          step="500"
-                          min="2500"
-                          max="500000"
+                <div class="product-images">
+                  <div class="arrow-left">
+                    <i class="uil uil-arrow-left" id="scroll-left"></i>
+                  </div>
+                  <div class="image-slider">
+                    <ul id="image-list">
+                      <li>
+                        <img
+                          src="//drou-electronics-store.myshopify.com/cdn/shop/products/p4_c46c6d30-4b9f-4971-96be-d28d9f0d5ee5_large.jpg?v=1674275311"
+                          alt=""
+                          class="thumbnail active"
                         />
-                        <span>FCFA</span>
-                      </div>
-                      <!-- <div class="separator">-</div> -->
-                      <div class="field">
-                        <input
-                          type="number"
-                          class="input-max"
-                          value="500000"
-                          step="500"
-                          min="2500"
-                          max="500000"
+                      </li>
+                      <li>
+                        <img
+                          src="//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311"
+                          alt=""
+                          class="thumbnail"
                         />
-                        <span>FCFA</span>
-                      </div>
+                      </li>
+                      <li>
+                        <img
+                          src="https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg"
+                          alt=""
+                          class="thumbnail"
+                        />
+                      </li>
+                      <li>
+                        <img
+                          src="https://drou-electronics-store.myshopify.com/cdn/shop/products/p7_36d931d4-1ef2-4c82-9a65-80426fb77f21_1024x1024.jpg?v=1674275335"
+                          alt=""
+                          class="thumbnail"
+                        />
+                      </li>
+                      <li>
+                        <img
+                          src="https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335"
+                          alt=""
+                          class="thumbnail"
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="arrow-right">
+                    <i class="uil uil-arrow-right" id="scroll-right"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="product-right">
+                <h2 id="productName1" class="product-title">
+                  iPhone 14 pro max
+                </h2>
+                <div class="product-price">
+                  <h3 id="productPrice">65.000 FCFA</h3>
+                </div>
+                <div class="sideContent">
+                  <div class="addToCart" onclick="addToCart()">
+                    Acheter maintenant
+                  </div>
+                  <div class="cart-counter" id="cartCounter">
+                    3 produit(s) dans le panier
+                  </div>
+                  <div class="secondContent">
+                    <div class="destination">
+                      <i class="uil uil-map-marker"></i>
+                      <span>Choix de destination</span>
+                    </div>
+                    <div class="location">
+                      <i class="uil uil-location-arrow"></i>
+                      <span>Livraison en 2-3 jours</span>
                     </div>
                   </div>
-
-                  <div>
-                    <hr class="custom-hr" />
+                  <div class="threeContent">
+                    <i class="uil uil-comments-alt"></i>
+                    <span>Besoin d'aide ? Contactez-nous</span>
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
 
-            <div class="shop-right">
-              <div class="grid-list-top mb-30">
-                <input type="checkbox" id="sidebar-active" hidden />
-                <label
-                  id="show-filtre"
-                  for="sidebar-active"
-                  class="open-sidebar-button"
-                >
-                  <div id="filtre-btn">
-                    <h3>Filtre</h3>
-                  </div>
-                </label>
-                <div class="grid-list-view">
-                  <button id="grid" class="change-view active">
-                    <i class="fa fa-th"></i>
-                  </button>
-                  <button id="list" class="change-view">
-                    <i class="fa fa-list-ul"></i>
-                  </button>
+            <div class="firstContent">
+              <div class="product-left">
+                <div class="" id=" ">
+                  <img
+                    id="ProductPhoto"
+                    class="product-zoom product_variant_image"
+                    data-image-id=""
+                    alt="DroSafe Charger"
+                    data-zoom-image="//drou-electronics-store.myshopify.com/cdn/shop/products/p10_1024x1024.jpg?v=1674275306"
+                    src="//drou-electronics-store.myshopify.com/cdn/shop/products/p10_1024x1024.jpg?v=1674275306"
+                  />
                 </div>
-                <span id="desktop-result" class="show-items"> </span>
-                <div class="main-toolbar-sorter clearfix">
-                  <div class="toolbar-sorter d-md-flex align-items-center">
-                    <label for="SortBy">Sort by:</label>
-                    <select class="sorter wide" name="SortBy" id="SortBy">
-                      <option value="manual">Featured</option>
-                      <option value="best-selling">Best Selling</option>
-                      <option value="title-ascending">
-                        Alphabetically, A-Z
-                      </option>
-                      <option value="title-descending">
-                        Alphabetically, Z-A
-                      </option>
-                      <option value="price-ascending">
-                        Price, low to high
-                      </option>
-                      <option value="price-descending">
-                        Price, high to low
-                      </option>
-                      <option value="created-descending">
-                        Date, new to old
-                      </option>
-                      <option value="created-ascending">
-                        Date, old to new
-                      </option>
-                    </select>
+                <div id="webizoom">
+                  <div class="arrow-left">
+                    <i class="uil uil-arrow-left" id="scroll-left"></i>
+                  </div>
+                  <div class="carousel-container">
+                    <ul class="product-images" id="thumbnail-list">
+                      <li>
+                        <img
+                          src="//drou-electronics-store.myshopify.com/cdn/shop/products/p4_c46c6d30-4b9f-4971-96be-d28d9f0d5ee5_large.jpg?v=1674275311"
+                          alt=""
+                          class="thumbnail active"
+                        />
+                      </li>
+                      <li>
+                        <img
+                          src="//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311"
+                          alt=""
+                          class="thumbnail"
+                        />
+                      </li>
+                      <li>
+                        <img
+                          src="https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg"
+                          alt=""
+                          class="thumbnail"
+                        />
+                      </li>
+                      <li>
+                        <img
+                          src="https://drou-electronics-store.myshopify.com/cdn/shop/products/p7_36d931d4-1ef2-4c82-9a65-80426fb77f21_1024x1024.jpg?v=1674275335"
+                          alt=""
+                          class="thumbnail"
+                        />
+                      </li>
+                      <li>
+                        <img
+                          src="https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335"
+                          alt=""
+                          class="thumbnail"
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="arrow-right">
+                    <i class="uil uil-arrow-right" id="scroll-right"></i>
                   </div>
                 </div>
               </div>
-
-              <div id="listProducts" class="listProducts grid"></div>
-
-              <div class="grid-list-top grid-list-top1 mb-30">
-                <span id="orther-result" class="show-items"> </span>
-
-                <div class="shop_pagi">
-                  <ul></ul>
-                </div>
-              </div>
+              <div class="product-right"></div>
             </div>
           </div>
         </section>
@@ -527,9 +492,11 @@
 
     <!-- ============== Scroll Up ==================== -->
     <div id="scrollUp"><i class="uil uil-arrow-up"></i></div>
-
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script> -->
     <script src="js/base.js"></script>
     <script src="js/shop.js"></script>
+    <script src="js/product.js"></script>
     <script src="js/filtre.js"></script>
   </body>
 </html>
