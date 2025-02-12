@@ -179,7 +179,6 @@ function closeModal() {
 }
 
 function AddToWish(button) {
-  console.log(button);
   const icon = button.querySelector("i");
   if (icon.classList.contains("uil-heart")) {
     // Change l'icône en spinner
@@ -267,15 +266,15 @@ function updateCompareModal() {
   // Spécifications
   const allSpecs = new Set();
   compareProducts.forEach((product) => {
-    if (product.species) {
-      Object.keys(product.species).forEach((sp) => allSpecs.add(sp));
+    if (product.specs) {
+      Object.keys(product.specs).forEach((sp) => allSpecs.add(sp));
     }
   });
 
   allSpecs.forEach((sp) => {
     modalHTML += `<tr><th>${sp}</th>`;
     compareProducts.forEach((product) => {
-      modalHTML += `<td>${product.species?.[sp] || "-"}</td>`;
+      modalHTML += `<td>${product.specs?.[sp] || "-"}</td>`;
     });
     modalHTML += `</tr>`;
   });

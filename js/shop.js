@@ -11,35 +11,37 @@ class Product {
   constructor(
     id,
     sales,
+    qty,
     name,
     category,
     price,
     priceReduction,
     images,
-    species
+    specs
   ) {
     this.id = id;
     this.sales = sales;
+    this.qty = qty;
     this.name = name;
     this.category = category;
     this.price = price;
     this.priceReduction = priceReduction;
     this.images = images;
-    this.species = species;
+    this.specs = specs;
     this.reference = this.generateReference();
     this.description = this.generateDescription();
   }
 
   generateReference() {
     const model = this.name.split(" ")[0].toUpperCase();
-    const ram = this.species["Mémoire RAM"]
-      ? this.species["Mémoire RAM"].match(/\d+/)[0]
+    const ram = this.specs["Mémoire RAM"]
+      ? this.specs["Mémoire RAM"].match(/\d+/)[0]
       : "NA";
-    const storage = this.species["Stockage"]
-      ? this.species["Stockage"].match(/\d+/)[0]
+    const storage = this.specs["Stockage"]
+      ? this.specs["Stockage"].match(/\d+/)[0]
       : "NA";
-    const color = this.species["Couleur"]
-      ? this.species["Couleur"].substring(0, 2).toUpperCase()
+    const color = this.specs["Couleur"]
+      ? this.specs["Couleur"].substring(0, 2).toUpperCase()
       : "XX";
 
     return `${model}-${ram}-${storage}-${color}`;
@@ -48,7 +50,7 @@ class Product {
   generateDescription() {
     let desc = `[${this.reference}]\n`;
 
-    for (const [key, value] of Object.entries(this.species)) {
+    for (const [key, value] of Object.entries(this.specs)) {
       desc += `- ${key} : ${value}\n`;
     }
 
@@ -60,6 +62,7 @@ const products = [
   new Product(
     0,
     100,
+    10,
     "Uphone lightning cable",
     "Téléphonie & Tablette/Accessoirs/Chargeurs & cablés",
     10000,
@@ -91,6 +94,7 @@ const products = [
   new Product(
     1,
     10,
+    15,
     "Smartphone Tecno Spark Go 2024",
     "Téléphonie & Tablette/Smartphone",
     65000,
@@ -122,6 +126,7 @@ const products = [
   new Product(
     2,
     5,
+    20,
     "iPhone 14 pro max",
     "Téléphonie & Tablette/Smartphone",
     250000,
@@ -129,8 +134,8 @@ const products = [
 
     [
       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p7_36d931d4-1ef2-4c82-9a65-80426fb77f21_1024x1024.jpg?v=1674275335",
-
       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
+      "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
     ],
 
     {
@@ -166,7 +171,7 @@ const products = [
 //       "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "Windows 10",
 //       Processeur: "Intel Atom",
 //       "Réf processeur":
@@ -199,7 +204,7 @@ const products = [
 //       "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "iOS 15.3",
 //       Processeur: "Apple A15 Bionic",
 //       "Réf processeur":
@@ -229,7 +234,7 @@ const products = [
 //       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "Android 12.1",
 //       Processeur: "Snapdragon 888",
 //       "Réf processeur":
@@ -259,7 +264,7 @@ const products = [
 //       "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "Windows 10",
 //       Processeur: "Intel Atom",
 //       "Réf processeur":
@@ -291,7 +296,7 @@ const products = [
 //       "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "iOS 15.3",
 //       Processeur: "Apple A15 Bionic",
 //       "Réf processeur":
@@ -320,7 +325,7 @@ const products = [
 //       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "Android 12.1",
 //       Processeur: "Snapdragon 888",
 //       "Réf processeur":
@@ -349,7 +354,7 @@ const products = [
 //       "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "Windows 10",
 //       Processeur: "Intel Atom",
 //       "Réf processeur":
@@ -381,7 +386,7 @@ const products = [
 //       "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "iOS 15.3",
 //       Processeur: "Apple A15 Bionic",
 //       "Réf processeur":
@@ -410,7 +415,7 @@ const products = [
 //       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "Android 12.1",
 //       Processeur: "Snapdragon 888",
 //       "Réf processeur":
@@ -439,7 +444,7 @@ const products = [
 //       "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "Windows 10",
 //       Processeur: "Intel Atom",
 //       "Réf processeur":
@@ -471,7 +476,7 @@ const products = [
 //       "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "iOS 15.3",
 //       Processeur: "Apple A15 Bionic",
 //       "Réf processeur":
@@ -500,7 +505,7 @@ const products = [
 //       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "Android 12.1",
 //       Processeur: "Snapdragon 888",
 //       "Réf processeur":
@@ -529,7 +534,7 @@ const products = [
 //       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
 //     description:
 //       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-//     species: {
+//     specs: {
 //       "Système d'exploitation": "Android 12.1",
 //       Processeur: "Snapdragon 888",
 //       "Réf processeur":
@@ -802,9 +807,9 @@ function applyFilter(filters, category, isInCategory = false) {
         }
 
         return (
-          product.species[key] &&
+          product.specs[key] &&
           filters[key].some(
-            (v) => product.species[key].toLowerCase() === v.toLowerCase()
+            (v) => product.specs[key].toLowerCase() === v.toLowerCase()
           )
         );
       });

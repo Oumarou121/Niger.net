@@ -11,7 +11,7 @@ const products = [
       "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "Windows 10",
       Processeur: "Intel Atom",
       "Réf processeur":
@@ -42,7 +42,7 @@ const products = [
       "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "iOS 15.3",
       Processeur: "Apple A15 Bionic",
       "Réf processeur":
@@ -70,7 +70,7 @@ const products = [
       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "Android 12.1",
       Processeur: "Snapdragon 888",
       "Réf processeur":
@@ -98,7 +98,7 @@ const products = [
       "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "Windows 10",
       Processeur: "Intel Atom",
       "Réf processeur":
@@ -129,7 +129,7 @@ const products = [
       "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "iOS 15.3",
       Processeur: "Apple A15 Bionic",
       "Réf processeur":
@@ -157,7 +157,7 @@ const products = [
       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "Android 12.1",
       Processeur: "Snapdragon 888",
       "Réf processeur":
@@ -185,7 +185,7 @@ const products = [
       "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "Windows 10",
       Processeur: "Intel Atom",
       "Réf processeur":
@@ -216,7 +216,7 @@ const products = [
       "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "iOS 15.3",
       Processeur: "Apple A15 Bionic",
       "Réf processeur":
@@ -244,7 +244,7 @@ const products = [
       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "Android 12.1",
       Processeur: "Snapdragon 888",
       "Réf processeur":
@@ -272,7 +272,7 @@ const products = [
       "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "Windows 10",
       Processeur: "Intel Atom",
       "Réf processeur":
@@ -303,7 +303,7 @@ const products = [
       "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "iOS 15.3",
       Processeur: "Apple A15 Bionic",
       "Réf processeur":
@@ -331,7 +331,7 @@ const products = [
       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "Android 12.1",
       Processeur: "Snapdragon 888",
       "Réf processeur":
@@ -359,7 +359,7 @@ const products = [
       "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
     description:
       "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    species: {
+    specs: {
       "Système d'exploitation": "Android 12.1",
       Processeur: "Snapdragon 888",
       "Réf processeur":
