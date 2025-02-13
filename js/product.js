@@ -97,26 +97,21 @@ document.addEventListener("DOMContentLoaded", function () {
   navLinks.forEach((link) => {
     link.addEventListener("click", async function () {
       if (!this.classList.contains("active")) {
-        // Retirer la classe "active" des autres liens
         navLinks.forEach((nav) => nav.classList.remove("active"));
 
-        // Réduction progressive de l'opacité
         tabContents.forEach((content) => (content.style.opacity = 0));
-        await delay(250); // Attendre la transition avant de cacher
+        await delay(250);
 
-        // Cacher tous les contenus après la transition
         tabContents.forEach((content) => (content.style.display = "none"));
 
-        // Activer l'onglet cliqué
         this.classList.add("active");
 
-        // Afficher le bon contenu
         const contentId = this.getAttribute("data-tab");
         const targetContent = document.getElementById(contentId);
 
         if (targetContent) {
           targetContent.style.display = "block";
-          await delay(50); // Petit délai avant d'augmenter l'opacité
+          await delay(50);
           targetContent.style.opacity = 1;
         }
       }
@@ -133,12 +128,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const reviewsSection = document.getElementById("reviews-section");
   const stars = document.querySelectorAll(".star");
-  const reviewText = document.getElementById("review-text");
   const submitReview = document.getElementById("submit-review");
 
   let selectedRating = 0;
 
-  // ⭐ Gestion des étoiles
   stars.forEach((star) => {
     star.addEventListener("click", function () {
       selectedRating = parseInt(this.getAttribute("data-value"));
@@ -148,56 +141,120 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 📩 Envoi d'un avis
   submitReview.addEventListener("click", function () {
-    const text = reviewText.value.trim();
-    if (selectedRating === 0 || text === "") {
-      alert("Veuillez donner une note et un commentaire.");
+    const review = {
+      name: document.getElementById("user-name").value,
+      rating: selectedRating,
+      date: new Date().toLocaleDateString(),
+      content: document.getElementById("user-name").value,
+    };
+
+    if (!review.name || !review.rating || !review.date || !review.content) {
+      document.getElementById("error-content").style.opacity = 1;
       return;
     }
 
-    // Création d'un avis
-    const review = {
-      id: Date.now(),
-      rating: selectedRating,
-      text: text,
-      date: new Date().toLocaleDateString(),
-    };
+    console.log(review);
+    alert(review.name + review.rating + review.date + review.content);
 
-    saveReview(review);
     displayReviews();
-    reviewText.value = "";
     selectedRating = 0;
     stars.forEach((s) => s.classList.remove("active"));
   });
 
-  // 💾 Stockage des avis
-  function saveReview(review) {
-    let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
-    reviews.unshift(review);
-    localStorage.setItem("reviews", JSON.stringify(reviews));
-  }
-
-  // 📜 Affichage des avis
   function displayReviews() {
-    let reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+    if (!product || !product.reviews) {
+      console.error("Les avis du produit sont introuvables.");
+      return;
+    }
+
+    let reviews = [...product.reviews];
+    const progress = document.querySelectorAll(".rating-bars progress");
+    reviews = reviews.sort((a, b) => b.rating - a.rating);
+    progress.forEach((progressBar, index) => {
+      let nbr = 0;
+      for (let i = 0; i < reviews.length; i++) {
+        if (reviews[i].rating === 5 - index) {
+          nbr++;
+        }
+      }
+      progressBar.value = nbr === 0 ? "0" : (nbr / reviews.length) * 100;
+    });
+
+    let totalReviews = reviews.length;
+    let averageRating =
+      totalReviews > 0
+        ? (
+            reviews.reduce((sum, review) => sum + review.rating, 0) /
+            totalReviews
+          ).toFixed(1)
+        : "0";
+
+    const averageRatingContent = document.getElementById(
+      "average-rating-stars"
+    );
+
+    let fullStars = Math.floor(averageRating);
+    let partialStar1 = averageRating - fullStars;
+    let emptyStars = Math.floor(5 - fullStars - partialStar1);
+    let partialStar2 = 1 - partialStar1;
+
+    averageRatingContent.innerHTML = `
+  ${'<span class="star-bars active">★</span>'.repeat(fullStars)}
+  ${partialStar1 > 0 ? '<span class="star-bars active partial">★</span>' : ""}
+  ${'<span class="star-bars">★</span>'.repeat(emptyStars)}
+`;
+
+    if (partialStar1 > 0) {
+      document.querySelector(
+        ".star-bars.active.partial"
+      ).style.background = `linear-gradient(to right, gold ${
+        partialStar1 * 100
+      }%, #ccc ${partialStar2 * 100}%)`;
+    }
+
+    document.getElementById("average-rating").textContent = averageRating;
+    document.getElementById(
+      "total-reviews"
+    ).textContent = `${totalReviews} review(s)`;
+
+    if (totalReviews === 0) {
+      reviewsSection.innerHTML = `<p class="no-reviews">Aucun avis pour le moment.</p>`;
+      return;
+    }
+
     reviewsSection.innerHTML = reviews
-      .map(
-        (review) => `
-      <div class="review">
-        <div class="review-header">
-          <span class="stars-display">${"★".repeat(review.rating)}${"☆".repeat(
-          5 - review.rating
-        )}</span>
-          <span class="date">${review.date}</span>
+      .map((review) => {
+        let rating = Math.max(0, Math.min(5, review.rating));
+
+        return `
+        <div class="review">
+          <div class="review-header">
+            <div class="header-left">
+              <span class="user-name">${review.name}</span>
+              <span class="date">${review.date}</span>
+            </div>
+            <div class="header-right">
+              ${'<span class="star-bars active">★</span>'.repeat(rating)}
+              ${'<span class="star-bars">★</span>'.repeat(5 - rating)}
+            </div>
+          </div>
+          <p>${review.comment}</p>
         </div>
-        <p>${review.text}</p>
-      </div>
-    `
-      )
+      `;
+      })
       .join("");
   }
 
-  // Charger les avis au démarrage
   displayReviews();
+
+  const similarsProductsContent = document.getElementById("similars-products");
+  const similarProducts = productManager.findMostSimilarProducts(product);
+  console.log(similarProducts);
+
+  similarsProductsContent.innerHTML = "";
+
+  similarProducts.forEach((product) => {
+    similarsProductsContent.innerHTML += creationProduct(product);
+  });
 });

@@ -152,7 +152,14 @@
           </div>
         </div>
       </header>
-
+      <svg style="display: none">
+        <symbol id="warning" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,16a1,1,0,1,1,1-1A1,1,0,0,1,12,18Zm1-5a1,1,0,0,1-2,0V7a1,1,0,0,1,2,0Z"
+          />
+        </symbol>
+      </svg>
       <main id="main">
         <section class="product-feature mb-40">
           <div class="custom-container">
@@ -231,7 +238,10 @@
                     <div class="product-cart-action addToCart">
                       <button type="submit" class="pro-cart" id="AddToCart">
                         <span>
-                          <span class="cart-title" id="AddToCartText"
+                          <span
+                            class="cart-title"
+                            id="AddToCartText"
+                            onclick="AddToCart(this, true)"
                             >Add to cart</span
                           >
                         </span>
@@ -259,7 +269,7 @@
               </div>
             </div>
           </div>
-          <section class="secondContent">
+          <div class="secondContent">
             <nav>
               <ul class="bar-nav">
                 <li class="active" data-tab="description">Description</li>
@@ -283,16 +293,10 @@
                       <h2>Rating and Reviews</h2>
                       <div class="rating-top">
                         <div class="rating-top-content">
-                          <h2>4.5</h2>
-                          <p>1,234 reviews</p>
+                          <h2 id="average-rating">4.5</h2>
+                          <p id="total-reviews">1,234 reviews</p>
                         </div>
-                        <div class="rating-bar">
-                          <span class="star-bars active">★</span>
-                          <span class="star-bars active">★</span>
-                          <span class="star-bars active">★</span>
-                          <span class="star-bars active">★</span>
-                          <span class="star-bars">★</span>
-                        </div>
+                        <div id="average-rating-stars" class="rating-bar"></div>
                       </div>
                       <div class="rating-bars">
                         <div class="rating-bar">
@@ -352,15 +356,16 @@
                         id="user-name"
                         placeholder="Votre nom"
                       />
-                      <input
-                        type="email"
-                        id="user-email"
-                        placeholder="Votre email"
-                      />
                       <textarea
                         id="user-review"
                         placeholder="Votre avis"
                       ></textarea>
+                      <div id="error-content" class="error">
+                        <svg class="error-icon" width="12px" height="12px">
+                          <use href="#warning" />
+                        </svg>
+                        <span>Veillez remplir tous les champs</span>
+                      </div>
                       <button id="submit-review">Soumettre</button>
                     </div>
                   </div>
@@ -370,7 +375,18 @@
                 </div>
               </div>
             </div>
-          </section>
+          </div>
+          <div class="thridContent">
+            <div class="custom-container">
+              <div class="section-title-btn-wrap mb-30">
+                <div class="section-title-1">
+                  <h2>Similar Products</h2>
+                </div>
+              </div>
+
+              <div id="similars-products" class="similars-products grid"></div>
+            </div>
+          </div>
         </section>
       </main>
 
