@@ -330,7 +330,7 @@ body.modal-open {
 .login {
   margin: 0 0.5rem;
   padding-top: 1rem;
-  border-top: 2px var(--white) solid;
+  border-top: 2px solid #e5e5e5;
 }
 
 .headerTop {
@@ -339,17 +339,16 @@ body.modal-open {
   justify-content: space-between;
   padding: 0.5rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid var(--gray);
-  background-color: var(--white);
+  border-bottom: 1px solid #e5e5e5;
 }
 
 .phone {
-  border-right: 1px solid var(--gray);
+  border-right: 1px solid #e5e5e5;
   padding-right: 1rem;
 }
 
 .log {
-  border-left: 1px solid var(--gray);
+  border-left: 1px solid #e5e5e5;
   padding-left: 1rem;
 }
 
@@ -561,6 +560,7 @@ header {
   position: relative;
   top: 0;
   z-index: 9999;
+  color: #333;
 }
 
 .fixed {
@@ -1422,4 +1422,105 @@ header {
 
 .arrowCategory.rot {
   transform: rotate(180deg);
+}
+
+.uil-angle-double-right,
+.uil-angle-double-left {
+  font-size: 24px;
+}
+
+.shop_pagi ul,
+.blogs-pagi ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.shop_pagi li,
+.blogs-pagi li {
+  display: inline-block;
+}
+
+.shop_pagi a,
+.shop_pagi span,
+.blogs-pagi a,
+.blogs-pagi span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease-in-out;
+}
+
+.shop_pagi a:hover,
+.blogs-pagi a:hover {
+  color: var(--red);
+}
+
+.page-item {
+  cursor: pointer;
+}
+
+.shop_pagi .disabled span,
+.blogs-pagi .disabled span {
+  color: #aaa;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.shop_pagi .dots span,
+.blogs-pagi .dots span {
+  width: auto;
+  height: auto;
+  border: none;
+  background: none;
+  padding: 0 10px;
+  margin-top: 25%;
+}
+
+.shop_pagi .active,
+.blogs-pagi .active {
+  background-color: var(--red);
+  color: #fff !important;
+  font-weight: bold;
+  cursor: default;
+  border-radius: 50%;
+  border: none !important;
+}
+
+.shop_pagi .active span,
+.blogs-pagi .active span {
+  color: #fff !important;
+}
+
+.no-results-container {
+  grid-column: span 3;
+  text-align: center;
+  padding: 30px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-results-container i {
+  font-size: 40px;
+  color: hsl(356.7 90.1% 56.5%);
+  margin-bottom: 10px;
+}
+
+.no-results-container p {
+  font-size: 16px;
+  color: #444;
+  font-weight: bold;
 }

@@ -86,6 +86,238 @@ class ProductManager {
   }
 }
 
+class Blog {
+  constructor(id, name, paragraphs, important, date, comments, tag, reviews) {
+    this.id = id;
+    this.name = name;
+    this.paragraphs = paragraphs;
+    this.important = important;
+    this.date = date;
+    this.comments = comments;
+    this.tag = tag;
+    this.reviews = reviews;
+  }
+}
+
+function getUniqueTags(blogs) {
+  return [...new Set(blogs.map((blog) => blog.tag.trim().toLowerCase()))];
+}
+
+class Filtres {
+  constructor() {
+    this.categories = [];
+  }
+
+  addCategory(category) {
+    this.categories.push(category);
+  }
+
+  generateFilters() {
+    return this.categories;
+  }
+}
+
+class Category {
+  constructor(name) {
+    this.name = name;
+    this.subCategories = [];
+    this.options = [];
+  }
+
+  addSubCategory(subCategory) {
+    this.subCategories.push(subCategory);
+  }
+
+  getSubCategory() {
+    return this.subCategories;
+  }
+
+  // Ajouter une option à la catégorie
+  addOption(option) {
+    this.options.push(option);
+  }
+
+  // Retourner les options associées à cette catégorie
+  getOptions() {
+    return this.options;
+  }
+}
+
+class Option {
+  constructor(title, values) {
+    this.title = title;
+    this.values = values;
+  }
+
+  getTitle() {
+    return this.title;
+  }
+
+  getValues() {
+    return this.values;
+  }
+}
+
+class SubCategory extends Category {}
+
+const informatique = new Category("Informatique");
+
+const ordinateurPortable = new SubCategory("Ordinateur Portable");
+const ordinateurBureau = new SubCategory("Ordinateur Bureau");
+const Iaccessoirs = new SubCategory("Accessoirs et Peripherique");
+
+informatique.addSubCategory(ordinateurPortable);
+informatique.addSubCategory(ordinateurBureau);
+informatique.addSubCategory(Iaccessoirs);
+ordinateurPortable.addOption(new Option("Access", ["oui", "non"]));
+ordinateurPortable.addOption(new Option("Stockage", ["SSD", "HDD"]));
+informatique.addOption(new Option("Résolution", ["1080p", "2k", "4K"]));
+ordinateurPortable.addOption(new Option("Résolution", ["Full HD"]));
+
+ordinateurPortable.addSubCategory(new SubCategory("Pc Portable"));
+ordinateurPortable.addSubCategory(new SubCategory("Pc Portable Gamer"));
+ordinateurPortable.addSubCategory(new SubCategory("Pc Portable Pro"));
+
+ordinateurBureau.addSubCategory(new SubCategory("Ecran"));
+ordinateurBureau.addSubCategory(new SubCategory("Pc Bureau"));
+ordinateurBureau.addSubCategory(new SubCategory("Pc Bureau Gamer"));
+ordinateurBureau.addSubCategory(new SubCategory("Pc Tout en Un"));
+
+Iaccessoirs.addSubCategory(new SubCategory("Casque"));
+Iaccessoirs.addSubCategory(new SubCategory("Sac à Dos"));
+Iaccessoirs.addSubCategory(new SubCategory("Souris"));
+Iaccessoirs.addSubCategory(new SubCategory("Claviers"));
+
+//Telephonie & Tablette
+const telephonieTablette = new Category("Téléphonie & Tablette");
+const Taccessoirs = new SubCategory("Accessoirs");
+
+telephonieTablette.addSubCategory(new SubCategory("Telephone Portable"));
+telephonieTablette.addSubCategory(new SubCategory("Smartphone"));
+telephonieTablette.addSubCategory(new SubCategory("Telephone Fixe"));
+telephonieTablette.addSubCategory(new SubCategory("Tablette tactile"));
+telephonieTablette.addSubCategory(new SubCategory("Smart Watch"));
+telephonieTablette.addSubCategory(Taccessoirs);
+
+Taccessoirs.addSubCategory(new SubCategory("Protection"));
+Taccessoirs.addSubCategory(new SubCategory("Chargeurs & cablés"));
+Taccessoirs.addSubCategory(new SubCategory("Power Bank"));
+Taccessoirs.addSubCategory(new SubCategory("Batterie"));
+Taccessoirs.addSubCategory(new SubCategory("Divers"));
+
+//Stockage
+const stockage = new Category("Stockage");
+
+stockage.addSubCategory(new SubCategory("Disque Dur internes"));
+stockage.addSubCategory(new SubCategory("Disque Dur externes"));
+stockage.addSubCategory(new SubCategory("Clé USB"));
+stockage.addSubCategory(new SubCategory("Carte mémoire"));
+
+// TV-Son-Console
+const tvSonConsole = new Category("TV-Son-Console");
+const consoles = new SubCategory("Consoles & Jeux");
+
+tvSonConsole.addSubCategory(new SubCategory("TV"));
+tvSonConsole.addSubCategory(new SubCategory("Son"));
+tvSonConsole.addSubCategory(new SubCategory("Appareils Photos"));
+tvSonConsole.addSubCategory(consoles);
+consoles.addSubCategory(new SubCategory("Consoles"));
+consoles.addSubCategory(new SubCategory("Manettes de Jeux"));
+consoles.addSubCategory(new SubCategory("Disques de Jeux"));
+
+// Sécurite
+const securite = new Category("Sécurité");
+
+securite.addSubCategory(new SubCategory("Systèmes & Logiciels Antivirus"));
+securite.addSubCategory(new SubCategory("Systèmes de Sécurité"));
+securite.addSubCategory(new SubCategory("Caméras"));
+
+// Creation des filtres
+const filtres = new Filtres();
+filtres.addCategory(informatique);
+filtres.addCategory(telephonieTablette);
+filtres.addCategory(stockage);
+filtres.addCategory(tvSonConsole);
+filtres.addCategory(securite);
+
+function generateCategoryList(categories, parentElement, isDesktop = false) {
+  categories.forEach((category) => {
+    const li = document.createElement("li");
+    li.classList.add("category");
+
+    const a = document.createElement("a");
+    a.textContent = category.name;
+    a.href = `shop.html?category=${encodeURIComponent(category.name)}`;
+
+    const ul = document.createElement("ul");
+    ul.classList.add("category-list");
+    ul.style.display = isDesktop ? "block" : "none";
+
+    const i = document.createElement("i");
+    i.classList.add("fas", "fa-angle-down", "arrowCategory");
+
+    i.addEventListener("click", (event) => {
+      event.preventDefault();
+      toggleVisibility(ul);
+      i.classList.toggle("rot");
+    });
+
+    li.appendChild(a);
+    !isDesktop ? li.appendChild(i) : null;
+    li.appendChild(ul);
+    parentElement.appendChild(li);
+
+    generateSubCategoryList(category, ul, isDesktop, [category.name]);
+  });
+}
+
+function generateSubCategoryList(category, parentElement, isDesktop, path) {
+  category.getSubCategory().forEach((subCategory) => {
+    const li = document.createElement("li");
+    const aSub = document.createElement("a");
+    aSub.textContent = subCategory.name;
+
+    const newPath = [...path, subCategory.name];
+    aSub.href = `shop.html?category=${encodeURIComponent(newPath.join("/"))}`;
+
+    const ul = document.createElement("ul");
+    ul.style.display = isDesktop ? "block" : "none";
+
+    if (subCategory.getSubCategory().length > 0) {
+      li.classList.add("sub-category");
+    } else {
+      li.classList.add("no-sub-category");
+    }
+
+    li.appendChild(aSub);
+    li.appendChild(ul);
+    parentElement.appendChild(li);
+
+    generateSubCategoryList(subCategory, ul, isDesktop, newPath);
+  });
+}
+
+function toggleVisibility(ul) {
+  if (ul.style.display === "none" || ul.style.display === "") {
+    ul.style.display = "block";
+
+    ul.querySelectorAll("ul").forEach((subUl) => {
+      subUl.style.display = "block";
+    });
+  } else {
+    ul.style.display = "none";
+
+    ul.querySelectorAll("ul").forEach((subUl) => {
+      subUl.style.display = "none";
+    });
+  }
+}
+
+const categoryList = document.getElementById("category-list");
+const categoryListDesktop = document.getElementById("category-list-desktop");
+generateCategoryList(filtres.generateFilters(), categoryList, false);
+generateCategoryList(filtres.generateFilters(), categoryListDesktop, true);
+
 const products = [
   new Product(
     0,
@@ -229,6 +461,281 @@ const products = [
       Garantie: "1 an",
     },
     [
+      {
+        name: "AB",
+        date: "12/04/2024",
+        rating: 5,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Issou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Almou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+    ]
+  ),
+];
+
+const blogs = [
+  new Blog(
+    1,
+    "Music magnate headphones",
+
+    [
+      {
+        images: [
+          "//drou-electronics-store.myshopify.com/cdn/shop/articles/04_684500ea-e527-4171-8e1a-07c34d71c243_1024x1024.jpg?v=1674279180",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+      {
+        images: [
+          "assets/images/banner/banner1.jpg",
+          "assets/images/banner/banner2.jpg",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+    ],
+    "Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt labo dolor magna aliqua. Ut enim ad minim veniam quis nostrud.",
+    "12/04/2024",
+    12,
+    "iphone",
+    [
+      {
+        name: "AB",
+        date: "12/04/2024",
+        rating: 5,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Issou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Almou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+    ]
+  ),
+  new Blog(
+    2,
+    "MacBook Air labore et dolore",
+    [
+      {
+        images: [
+          "//drou-electronics-store.myshopify.com/cdn/shop/articles/b1_a4c8283b-edba-463f-bcb7-d2cf8f3ce46f_1024x1024.jpg?v=1674279118",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+      {
+        images: [
+          "assets/images/banner/banner1.jpg",
+          "assets/images/banner/banner2.jpg",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+    ],
+    "Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt labo dolor magna aliqua. Ut enim ad minim veniam quis nostrud.",
+    "12/12/2024",
+    15,
+    "mac OS",
+    [
+      {
+        name: "AB",
+        date: "12/04/2024",
+        rating: 5,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Issou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Almou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+    ]
+  ),
+  new Blog(
+    3,
+    "New iPhone 17 review",
+    [
+      {
+        images: [
+          "//drou-electronics-store.myshopify.com/cdn/shop/articles/b2_74c4b7c0-e805-4704-a4ab-4e68c8e4eae2_1024x1024.jpg?v=1674279232",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+      {
+        images: [
+          "assets/images/banner/banner1.jpg",
+          "assets/images/banner/banner2.jpg",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+    ],
+    "Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt labo dolor magna aliqua. Ut enim ad minim veniam quis nostrud.",
+    "12/04/2024",
+    18,
+    "iphone",
+    [
+      {
+        name: "AB",
+        date: "12/04/2024",
+        rating: 5,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Issou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Almou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+    ]
+  ),
+  new Blog(
+    4,
+    "MacBook Air 3 labore et dolore",
+    [
+      {
+        images: [
+          "//drou-electronics-store.myshopify.com/cdn/shop/articles/b1_3b00d3c2-2f39-45bc-8e1c-fa7af69a0a27_1024x1024.jpg?v=1674279260",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+      {
+        images: [
+          "assets/images/banner/banner1.jpg",
+          "assets/images/banner/banner2.jpg",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+    ],
+    "Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt labo dolor magna aliqua. Ut enim ad minim veniam quis nostrud.",
+    "12/04/2024",
+    18,
+    "mac OS",
+    [
+      {
+        name: "AB",
+        date: "12/04/2024",
+        rating: 5,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Issou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Almou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+    ]
+  ),
+  new Blog(
+    4,
+    "MacBook Air 3 labore et dolore",
+    [
+      {
+        images: [
+          "//drou-electronics-store.myshopify.com/cdn/shop/articles/b1_3b00d3c2-2f39-45bc-8e1c-fa7af69a0a27_1024x1024.jpg?v=1674279260",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+      {
+        images: ["assets/images/banner/banner1.jpg"],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+      {
+        images: ["assets/images/banner/banner2.jpg"],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+      {
+        images: [
+          "assets/images/banner/banner1.jpg",
+          "assets/images/banner/banner2.jpg",
+        ],
+        description:
+          "Le 14 décembre 2023, par Nicolas Roux, l'iPhone 15 pro max est le nouveau smartphone le plus populaire de la marque Apple. Cet appareil est disponible à partir du 15 janvier 2024 et semble être le nouveau produit le plus récent de la gamme.",
+      },
+    ],
+    "Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt labo dolor magna aliqua. Ut enim ad minim veniam quis nostrud.",
+    "12/04/2024",
+    18,
+    "mac OS",
+    [
+      {
+        name: "AB",
+        date: "12/04/2024",
+        rating: 5,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Issou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Almou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
       {
         name: "AB",
         date: "12/04/2024",
@@ -632,5 +1139,38 @@ function creationProduct(product) {
         </div>
       </div>
     </div>
+  `;
+}
+
+function creationBlog(blog) {
+  return `
+  <div class="blog-wrap mb-30">
+    <div class="blog-img">
+      <a href="/news.html?id=${blog.id}">
+        <img src="${blog.paragraphs[0].images[0]}" alt="${blog.name}" />
+      </a>
+      <div class="blog-tag">
+        <a href="/blogs.html?tag=${blog.tag}">${blog.tag}</a>
+      </div>
+    </div>
+    <div class="blog-content">
+      <div class="blog-meta">
+        <ul>
+          <li><i class="far fa-calendar"></i> ${blog.date}</li>
+          <li>
+            <i class="uil uil-comment-alt-lines"></i> ${blog.reviews.length} comment(s)
+          </li>
+        </ul>
+      </div>
+      <h3>
+        <a href="/news.html?id=${blog.id}">${blog.name}</a>
+      </h3>
+      <div class="blog-btn">
+        <a href="/news.html?id=${blog.id}">
+          Read more <i class="uil uil-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
   `;
 }

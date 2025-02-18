@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("productName").innerText = product.name;
   document.getElementById("productName1").innerText = product.name;
+  document.getElementById("title").innerText = `${product.name} - Niger.net`;
   productPhoto.src = product.images[0];
 
   product.images.forEach((image, index) => {
@@ -146,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
       name: document.getElementById("user-name").value,
       rating: selectedRating,
       date: new Date().toLocaleDateString(),
-      content: document.getElementById("user-name").value,
+      content: document.getElementById("user-review").value,
     };
 
     if (!review.name || !review.rating || !review.date || !review.content) {

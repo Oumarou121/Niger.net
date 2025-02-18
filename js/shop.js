@@ -1,9 +1,8 @@
 const grid = document.getElementById("grid");
 const list = document.getElementById("list");
 const productsContent = document.getElementById("listProducts");
-const productsPerPage = 9;
+const productsPerPage = 1;
 let currentPage = 1;
-const listProducts = document.getElementById("listProducts");
 const paginationContainer = document.querySelector(".shop_pagi ul");
 
 if (grid) {
@@ -34,10 +33,10 @@ function formatPrice(price) {
 }
 
 function displayProducts(page, filteredProducts = null) {
-  if (listProducts) {
-    listProducts.classList.remove("show");
+  if (productsContent) {
+    productsContent.classList.remove("show");
     setTimeout(() => {
-      listProducts.innerHTML = "";
+      productsContent.innerHTML = "";
 
       let productsToDisplay = filteredProducts || products;
 
@@ -46,7 +45,7 @@ function displayProducts(page, filteredProducts = null) {
       let paginatedItems = productsToDisplay.slice(start, end);
 
       if (paginatedItems.length === 0) {
-        listProducts.innerHTML = `
+        productsContent.innerHTML = `
         <div class="no-results-container">
         <i class="uil uil-search-alt"></i>
           <p>Aucun produit ne correspond aux critères recherchés.</p>
@@ -55,10 +54,10 @@ function displayProducts(page, filteredProducts = null) {
       }
 
       paginatedItems.forEach((product) => {
-        listProducts.innerHTML += creationProduct(product);
+        productsContent.innerHTML += creationProduct(product);
       });
 
-      listProducts.classList.add("show");
+      productsContent.classList.add("show");
       window.scrollTo({ top: 0, behavior: "smooth" });
 
       updatePagination(page, productsToDisplay);
@@ -66,24 +65,21 @@ function displayProducts(page, filteredProducts = null) {
   }
 }
 
-// Modification de la fonction de pagination pour accepter une liste de produits
 function updatePagination(currentPage, productsToDisplay) {
   paginationContainer.innerHTML = "";
 
   let totalPages = Math.ceil(productsToDisplay.length / productsPerPage);
 
   if (totalPages > 0) {
-    // Bouton Précédent
     paginationContainer.innerHTML += `
       <li class="${currentPage === 1 ? "disabled" : "prev"}" data-page="${
       currentPage - 1
     }">
-        <span><i class="uil uil-angle-left"></i></span>
+        <span><i class="uil uil-angle-double-left"></i></span>
       </li>
     `;
 
     if (totalPages <= 4) {
-      // Affichage normal si <= 4 pages
       for (let i = 1; i <= totalPages; i++) {
         paginationContainer.innerHTML += `
           <li class="page-item ${
@@ -94,7 +90,6 @@ function updatePagination(currentPage, productsToDisplay) {
         `;
       }
     } else {
-      // Toujours afficher la première page
       paginationContainer.innerHTML += `
         <li class="page-item ${
           currentPage === 1 ? "active" : ""
@@ -124,7 +119,6 @@ function updatePagination(currentPage, productsToDisplay) {
         paginationContainer.innerHTML += `<li class="dots"><span>...</span></li>`;
       }
 
-      // Toujours afficher la dernière page
       paginationContainer.innerHTML += `
         <li class="page-item" data-page="${totalPages}">
           <span>${totalPages}</span>
@@ -132,16 +126,14 @@ function updatePagination(currentPage, productsToDisplay) {
       `;
     }
 
-    // Bouton Suivant
     paginationContainer.innerHTML += `
       <li class="${
         currentPage === totalPages ? "disabled" : "next"
       }" data-page="${currentPage + 1}">
-        <span><i class="uil uil-angle-right"></i></span>
+        <span><i class="uil uil-angle-double-right"></i></span>
       </li>
     `;
 
-    // Mettre à jour le texte d'affichage des résultats
     document.getElementById("orther-result").innerText = `Showing ${Math.min(
       (currentPage - 1) * productsPerPage + 1,
       productsToDisplay.length
