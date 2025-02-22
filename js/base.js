@@ -1,5 +1,75 @@
-let filteredProducts = [];
-let compareProducts = [];
+var filteredProducts = [];
+var compareProducts = [];
+
+class User {
+  constructor(id, firstName, lastName, addresses = [], currentIndex) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.addresses = addresses;
+    this.currentIndex = currentIndex;
+  }
+
+  addAdress(address) {
+    this.addresses.push(address);
+  }
+}
+
+class Address {
+  constructor(
+    firstName,
+    lastName,
+    phoneNumber1,
+    phoneNumber2,
+    region,
+    district,
+    street
+  ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.phoneNumber1 = phoneNumber1;
+    this.phoneNumber2 = phoneNumber2;
+    this.region = region;
+    this.district = district;
+    this.street = street;
+  }
+}
+
+var user = new User(
+  0,
+  "Oumarou",
+  "Mamoudou",
+  [
+    new Address(
+      "Oumarou",
+      "M1",
+      "+227 98663248",
+      "+227 94464839",
+      "Niamey",
+      "Dar es salam",
+      "Pharmacy Say"
+    ),
+    new Address(
+      "Oumarou",
+      "M2",
+      "+227 98663248",
+      "+227 94464839",
+      "Niamey",
+      "Dar es salam",
+      "Pharmacy Say"
+    ),
+    new Address(
+      "Oumarou",
+      "M3",
+      "+227 98663248",
+      "+227 94464839",
+      "Niamey",
+      "Dar es salam",
+      "Pharmacy Say"
+    ),
+  ],
+  0
+);
 
 class Product {
   constructor(
@@ -132,12 +202,10 @@ class Category {
     return this.subCategories;
   }
 
-  // Ajouter une option à la catégorie
   addOption(option) {
     this.options.push(option);
   }
 
-  // Retourner les options associées à cette catégorie
   getOptions() {
     return this.options;
   }
@@ -319,6 +387,171 @@ generateCategoryList(filtres.generateFilters(), categoryList, false);
 generateCategoryList(filtres.generateFilters(), categoryListDesktop, true);
 
 const products = [
+  new Product(
+    0,
+    100,
+    10,
+    "Uphone lightning cable",
+    "Téléphonie & Tablette/Accessoirs/Chargeurs & cablés",
+    10000,
+    0,
+    [
+      "//drou-electronics-store.myshopify.com/cdn/shop/products/p4_c46c6d30-4b9f-4971-96be-d28d9f0d5ee5_large.jpg?v=1674275311",
+      "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
+    ],
+    {
+      "Système d'exploitation": "Windows 10",
+      Processeur: "Intel Atom",
+      "Réf processeur":
+        "Intel Atom x5-Z8350 Quad Core, 1,44 GHz jusqu'à 1,92 GHz, 2 Mode mémoire cache",
+      "Taille de mémoire": "64Go",
+      Mémoire: "2 Go",
+      "Disque Dur": "32 Go eMMC",
+      "Carte Graphique": "Intel HD Graphics",
+      "Taille Ecran": '14"',
+      "Type Ecran": "Full HD",
+      "Ecran Tactile": "Non",
+      Réseau: "WiFi - Bluetooth",
+      Caméra: "Webcam avec micro",
+      Garantie: "1 An",
+      Couleur: "Noir",
+      Availability: "Available In stock",
+      Access: "oui",
+    },
+    [
+      {
+        name: "Oumarou",
+        date: "12/04/2024",
+        rating: 1,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Ben Arfa",
+        date: "12/04/2024",
+        rating: 5,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Arafat",
+        date: "12/04/2024",
+        rating: 5,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+    ]
+  ),
+  new Product(
+    1,
+    10,
+    15,
+    "Smartphone Tecno Spark Go 2024",
+    "Téléphonie & Tablette/Smartphone",
+    65000,
+    5000,
+    [
+      "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
+      "https://www.tunisianet.com.tn/382924-large/smartphone-tecno-spark-go-2024-2-go-64-go-blanc.jpg",
+    ],
+    {
+      "Double SIM": "Oui",
+      Écran: 'Hole Screen 6.67" (720 x 1600 px), 120 Hz',
+      Processeur: "Unisoc T615 Octa-core (12 nm)",
+      "Mémoire RAM": "4 Go (+ 4 Go étendus)",
+      Stockage: "128 Go",
+      "Système opérateur": "Android 14 Go",
+      Réseau: "4G",
+      "Caméra Avant": "8 MP, double flash avant",
+      "Caméra Arrière": "13 MP, double flash arrière",
+      "Indice de protection": "IP54",
+      "Capteur d'empreintes": "Latéral",
+      Télécommande: "Infrarouge",
+      Batterie: "5000mAh",
+      "Charge rapide": "15 W Type C",
+      Audio: "Deux haut-parleurs (Son DTS)",
+      Couleur: "Vert",
+      Garantie: "1 an",
+    },
+    [
+      {
+        name: "Mohamed",
+        date: "12/04/2024",
+        rating: 2,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Ahmed",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Abou",
+        date: "12/04/2024",
+        rating: 2,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+    ]
+  ),
+  new Product(
+    2,
+    5,
+    20,
+    "iPhone 14 pro max",
+    "Téléphonie & Tablette/Smartphone",
+    250000,
+    45000,
+
+    [
+      "https://drou-electronics-store.myshopify.com/cdn/shop/products/p7_36d931d4-1ef2-4c82-9a65-80426fb77f21_1024x1024.jpg?v=1674275335",
+      "https://drou-electronics-store.myshopify.com/cdn/shop/products/p8_523c97c7-2aa2-47e8-8b17-5a3c05a66db3_1024x1024.jpg?v=1674275335",
+      "//drou-electronics-store.myshopify.com/cdn/shop/products/p5_61c8ce6b-3afa-4276-a285-f98e4d5c7f67_large.jpg?v=1674275311",
+    ],
+
+    {
+      Écran: '15.6" Full HD (1920 x 1080), IPS, 144 Hz',
+      Processeur:
+        "Intel Core i7-13620H 13e génération (jusqu’à 4.9 GHz, 24 Mo de cache)",
+      Mémoire: "8 Go DDR5",
+      Stockage: "SSD NVMe M.2 512 Go",
+      "Carte graphique": "NVIDIA GeForce RTX 4060, 8 Go GDDR6",
+      Clavier: "Rétroéclairé simple",
+      Webcam: "HD 720p",
+      Audio: "2x haut-parleurs 2W, Nahimic 3 Audio Enhancer, Hi-Res Audio",
+      Connectique: "2x USB 3.2, 1x USB-C 3.2, 1x HDMI 2.1",
+      Réseau: "Gigabit Ethernet - Wi-Fi 6E - Bluetooth 5.3",
+      Système: "FreeDos",
+      Couleur: "Noir translucide",
+      Garantie: "1 an",
+    },
+    [
+      {
+        name: "AB",
+        date: "12/04/2024",
+        rating: 5,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Issou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+      {
+        name: "Almou",
+        date: "12/04/2024",
+        rating: 4,
+        comment:
+          "Si vous souhaitez dès maintenant un téléphone fiable et performant, l'iPhone 15 continue d'être un choix parfait. Si vous souhaitez une option plus avancée et à long terme, vous devriez peut-être envisager d'acheter l'iPhone 16.",
+      },
+    ]
+  ),
   new Product(
     0,
     100,
@@ -865,19 +1098,27 @@ document.getElementById("scrollUp").addEventListener("click", function (e) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
-function AddToCart(button, isProduct = false) {
+function AddToCart(button, isProduct = false, isWishlist = false) {
   const productElement = isProduct
     ? button.closest(".firstContent")
+    : isWishlist
+    ? button.closest(".wishlist-card")
     : button.closest(".item");
   const product = {
     image: isProduct
       ? productElement.querySelector("#ProductPhoto").src
+      : isWishlist
+      ? productElement.querySelector(".product-img").src
       : productElement.querySelector("img").src,
     name: isProduct
       ? productElement.querySelector("#productName1").innerText
+      : isWishlist
+      ? productElement.querySelector(".product-title").innerText
       : productElement.querySelector(".item-title").innerText,
     price: isProduct
       ? productElement.querySelector("#productPrice").innerText
+      : isWishlist
+      ? productElement.querySelector(".product-price span").innerText
       : productElement.querySelector(".item-price span").innerText,
     quantity: isProduct
       ? productElement.querySelector(".quantity input").value
@@ -1076,6 +1317,11 @@ function closeCompareModal() {
   }
 }
 
+function formatPrice(price) {
+  if (isNaN(price)) return "Invalid price";
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 function creationProduct(product) {
   return `
     <div class="item">
@@ -1173,4 +1419,59 @@ function creationBlog(blog) {
     </div>
   </div>
   `;
+}
+
+function creationWishItem(product) {
+  return `
+    <div class="wishlist-card">
+      <div class="product-image">
+        <a class="product-link" href="${`/product.html?id=${product.id}`}">
+          <div class="image-wrapper">
+            <img
+              class="product-img"
+              src="${product.images[0]}"
+              alt="${product.name}"
+            />
+            ${
+              product.priceReduction
+                ? `<span class="item-prev-price">
+                   <span>-${formatPrice(product.priceReduction)} FCFA</span>
+                 </span>`
+                : ""
+            }
+          </div>
+        </a>
+        <div class="wishlist-button">
+          <button
+            class="wishlist-toggle"
+            onclick="toggleWish(this)"
+          >
+            <i class="uil uil-heart"></i>
+          </button>
+
+          <button
+            class="cart-toggle"
+            onclick="AddToCart(this, false, true)"
+          >
+            <i class="uil uil-shopping-bag"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="product-info">
+        <h2 class="product-title">
+          <a href="${`/product.html?id=${product.id}`}"
+            >${product.name}</a
+          >
+        </h2>
+        <div class="product-price">
+          <span>${formatPrice(product.price)} FCFA</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleWish(button) {
+  button.classList.toggle("no-active");
 }

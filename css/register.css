@@ -92,6 +92,11 @@
     flex-direction: column;
   }
 
+  .forg .form-input,
+  .logi .form-input {
+    max-width: 100% !important;
+    flex: 0 0 90% !important;
+  }
   .form-label,
   .form-input {
     max-width: 100%;

@@ -27,11 +27,6 @@ if (list) {
   });
 }
 
-function formatPrice(price) {
-  if (isNaN(price)) return "Invalid price"; // Gestion de l'erreur
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
 function displayProducts(page, filteredProducts = null) {
   if (productsContent) {
     productsContent.classList.remove("show");

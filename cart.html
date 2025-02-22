@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blogs - Niger.net</title>
+    <title>Your Shopping Cart - Niger.net</title>
     <link rel="stylesheet" href="css/base.css?v=1.0" />
-    <link rel="stylesheet" href="css/blogs.css" />
+    <link rel="stylesheet" href="css/cart.css" />
 
     <!--============Icon Cdn==============-->
     <link
@@ -28,7 +28,6 @@
     <!--============Google Fonts==============-->
   </head>
   <body>
-    <!-- ============Preloader============ -->
     <div id="preloader_active">
       <div id="loading-center">
         <div id="loading-center-absolute">
@@ -174,48 +173,92 @@
             <ul id="category-list"></ul>
           </div>
         </div>
+        <svg style="display: none">
+          <symbol id="warning" viewBox="0 0 24 24">
+            <path
+              fill="currentColor"
+              d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,16a1,1,0,1,1,1-1A1,1,0,0,1,12,18Zm1-5a1,1,0,0,1-2,0V7a1,1,0,0,1,2,0Z"
+            />
+          </symbol>
+        </svg>
       </header>
 
       <main id="main">
-        <section class="blogs-feature mb-40">
+        <section class="cart-feature mb-40">
           <div class="custom-container">
             <a href="index.html">Home</a> <span>/</span>
-            <span class="text-red">News</span>
+            <span class="text-red">Your Shopping Cart</span>
           </div>
         </section>
 
-        <div class="blogs-content custom-container">
-          <div class="left-content">
-            <div class="sidebar-widget">
-              <h4 class="sidebar-title">Search</h4>
-              <div class="search-box">
-                <form>
-                  <input
-                    id="searchBlog"
-                    type="search"
-                    placeholder="Search our blogs"
-                  />
-                  <button id="search-btn" type="button">
-                    <i class="uil uil-search"></i>
-                  </button>
-                </form>
-              </div>
+        <div class="cart-content custom-container">
+          <div id="cart-content" class="cart-first"></div>
 
-              <div id="tags-list" class="tags-list">
-                <ul></ul>
-              </div>
-            </div>
-
-            <!-- <div class="sidebar-widget">
-              <h4 class="sidebar-title">Tags</h4>
-            </div> -->
+          <div class="cart-second">
+            <!-- <div class="cart-btn">Update Cart</div> -->
+            <div class="cart-btn">Continue Shopping</div>
+            <div class="cart-btn">Clear Cart</div>
           </div>
-          <div class="right-content">
-            <div id="blogs-list" class="blogs-list"></div>
 
-            <div class="blogs-pagi-content">
-              <div class="blogs-pagi">
-                <ul></ul>
+          <div class="cart-thrid">
+            <!-- <div class="pick_delivery_date mb-50">
+              <h3>Pick a delivery date and Time</h3>
+              <div class="form-box">
+                <input
+                  id="date"
+                  class="form-input"
+                  type="date"
+                  value=""
+                  class="hasDatepicker"
+                />
+                <input
+                  id="time"
+                  class="form-input"
+                  type="time"
+                  placeholder="Write delivery time"
+                  value=""
+                />
+              </div>
+              <p class="m-0">
+                Pick delivery date and time as you choose. Delivery Time takes
+                place between 12PM - 4PM MON-FRI AND 8AM-11AM SAT.
+              </p>
+            </div> -->
+            <div class="cart-summary">
+              <h2 class="cart-summary-title">Cart Totals</h2>
+              <table class="cart-summary-table">
+                <tbody>
+                  <tr class="cart-subtotal">
+                    <th>Subtotal</th>
+                    <td>
+                      <span id="sub-total">150.000 FCFA</span>
+                    </td>
+                  </tr>
+                  <tr class="cart-subtotal">
+                    <th>Shipping</th>
+                    <td>
+                      <span id="shipping-total">150.000 FCFA</span>
+                    </td>
+                  </tr>
+                  <tr class="order-total">
+                    <th>Total</th>
+                    <td>
+                      <strong>
+                        <span id="total">152.000 FCFA</span>
+                      </strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="cart-actions">
+                <input type="checkbox" id="cart-terms" />
+                <label for="cart-terms"
+                  >I agree with the terms and conditions</label
+                >
+                <button type="submit" class="checkout-button" disabled>
+                  <a href="checkout.html">Proceed to Checkout</a>
+                </button>
               </div>
             </div>
           </div>
@@ -360,7 +403,6 @@
     <div id="scrollUp"><i class="uil uil-arrow-up"></i></div>
 
     <script src="js/base.js"></script>
-    <script src="js/blogs.js"></script>
-    <!-- <script src="js/filtre.js"></script> -->
+    <script src="js/cart.js"></script>
   </body>
 </html>

@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blogs - Niger.net</title>
+    <title>Addresses - Niger.net</title>
     <link rel="stylesheet" href="css/base.css?v=1.0" />
-    <link rel="stylesheet" href="css/blogs.css" />
+    <link rel="stylesheet" href="css/addresses.css" />
 
     <!--============Icon Cdn==============-->
     <link
@@ -28,7 +28,6 @@
     <!--============Google Fonts==============-->
   </head>
   <body>
-    <!-- ============Preloader============ -->
     <div id="preloader_active">
       <div id="loading-center">
         <div id="loading-center-absolute">
@@ -174,49 +173,133 @@
             <ul id="category-list"></ul>
           </div>
         </div>
+        <svg style="display: none">
+          <symbol id="warning" viewBox="0 0 24 24">
+            <path
+              fill="currentColor"
+              d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,16a1,1,0,1,1,1-1A1,1,0,0,1,12,18Zm1-5a1,1,0,0,1-2,0V7a1,1,0,0,1,2,0Z"
+            />
+          </symbol>
+        </svg>
       </header>
 
-      <main id="main">
-        <section class="blogs-feature mb-40">
+      <main id="account-page">
+        <section class="account-feature">
           <div class="custom-container">
             <a href="index.html">Home</a> <span>/</span>
-            <span class="text-red">News</span>
+            <span class="text-red">Addresses</span>
           </div>
         </section>
+        <div class="custom-container">
+          <h1>
+            My Account
+            <span id="addAddress" class="logout-link">Add a New Address</span>
+          </h1>
 
-        <div class="blogs-content custom-container">
-          <div class="left-content">
-            <div class="sidebar-widget">
-              <h4 class="sidebar-title">Search</h4>
-              <div class="search-box">
-                <form>
-                  <input
-                    id="searchBlog"
-                    type="search"
-                    placeholder="Search our blogs"
-                  />
-                  <button id="search-btn" type="button">
-                    <i class="uil uil-search"></i>
-                  </button>
-                </form>
-              </div>
+          <hr class="divider-small" />
 
-              <div id="tags-list" class="tags-list">
-                <ul></ul>
-              </div>
+          <div class="grid">
+            <div class="grid-item two-thirds">
+              <a href="account.html">Return to Account Details</a>
             </div>
-
-            <!-- <div class="sidebar-widget">
-              <h4 class="sidebar-title">Tags</h4>
-            </div> -->
-          </div>
-          <div class="right-content">
-            <div id="blogs-list" class="blogs-list"></div>
-
-            <div class="blogs-pagi-content">
-              <div class="blogs-pagi">
-                <ul></ul>
+            <div class="grid-item one-third">
+              <div class="addAddress" style="display: none">
+                <h2 class="section-title">Add a New Address</h2>
+                <div class="form-address">
+                  <div class="column">
+                    <div class="form-group">
+                      <label class="form-label" for="first-name"
+                        >First Name</label
+                      >
+                      <input
+                        type="text"
+                        id="first-name"
+                        placeholder="First Name"
+                        class="form-input"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="last-name"
+                        >Last Name</label
+                      >
+                      <input
+                        type="text"
+                        id="last-name"
+                        placeholder="Last Name"
+                        class="form-input"
+                      />
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="form-group">
+                      <label class="form-label" for="phone-number1"
+                        >Phone Number</label
+                      >
+                      <input
+                        type="text"
+                        id="phone-number1"
+                        placeholder="Phone Number"
+                        class="form-input"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="phone-number2"
+                        >Secondary Phone Number</label
+                      >
+                      <input
+                        type="text"
+                        id="phone-number2"
+                        placeholder="Secondary Phone Number"
+                        class="form-input"
+                      />
+                    </div>
+                  </div>
+                  <div class="select-box">
+                    <label class="form-label" for="region-select">Region</label>
+                    <select id="region-select" required>
+                      <option value="" disabled hidden>
+                        Sélectionnez une région
+                      </option>
+                      <option value="Agadez">Agadez</option>
+                      <option value="Diffa">Diffa</option>
+                      <option value="Dosso">Dosso</option>
+                      <option value="Maradi">Maradi</option>
+                      <option value="Tahoua">Tahoua</option>
+                      <option value="Tillabéri">Tillabéri</option>
+                      <option value="Zinder">Zinder</option>
+                      <option value="Niamey">Niamey</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="district">District</label>
+                    <input
+                      type="text"
+                      id="district"
+                      placeholder="District"
+                      class="form-input"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="street">Street</label>
+                    <input
+                      type="text"
+                      id="street"
+                      placeholder="Street"
+                      class="form-input"
+                    />
+                  </div>
+                  <div class="setDefault">
+                    <input id="address" type="checkbox" />
+                    <label for="address">Set as default address</label>
+                  </div>
+                  <button id="submitAddress" type="submit">
+                    UPDATE ADDRESS
+                  </button>
+                  <div id="cancel"><span>Cancel</span></div>
+                </div>
               </div>
+              <h2 class="section-title">Your Addresses</h2>
+              <div id="address-list"></div>
             </div>
           </div>
         </div>
@@ -360,7 +443,6 @@
     <div id="scrollUp"><i class="uil uil-arrow-up"></i></div>
 
     <script src="js/base.js"></script>
-    <script src="js/blogs.js"></script>
-    <!-- <script src="js/filtre.js"></script> -->
+    <script src="js/addresses.js"></script>
   </body>
 </html>
